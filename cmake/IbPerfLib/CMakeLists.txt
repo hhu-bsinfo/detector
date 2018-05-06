@@ -21,7 +21,8 @@ include_directories(${IBPERFLIB_SRC_DIR})
  
 set(SOURCE_FILES
         ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPerfCounter.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPort.cpp)
+        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPort.cpp
+        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbNode.cpp)
  
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
