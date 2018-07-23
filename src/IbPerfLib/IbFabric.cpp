@@ -18,6 +18,7 @@
 
 #include <algorithm>
 #include "IbFabric.h"
+#include "IbMadException.h"
 
 namespace IbPerfLib {
 
@@ -41,7 +42,7 @@ IbFabric::IbFabric() :
     m_fabric = ibnd_discover_fabric(nullptr, 0, nullptr, &config);
 
     if (m_fabric == nullptr) {
-        throw std::runtime_error("Unable to discover nodes in the fabric (ibnd_discover_fabric failed)!");
+        throw IbMadException("Unable to discover nodes in the fabric (ibnd_discover_fabric failed)!");
     }
 
     // The found nodes are stored in a linked list, where every node has a pointer to the next one.

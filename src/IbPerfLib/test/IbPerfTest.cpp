@@ -19,6 +19,7 @@
 #include <csignal>
 #include <chrono>
 #include <thread>
+#include <IbPerfLib/IbMadException.h>
 #include "IbPerfLib/IbFabric.h"
 
 bool isRunning = true;
@@ -37,8 +38,13 @@ int main(int argc, char *argv[]) {
     signal(SIGINT, SignalHandler);
 
     while(isRunning) {
-        fabric.RefreshCounters();
-        std::cout << fabric;
+        try {
+            fabric.RefreshCounters();
+            std::cout << fabric;
+        } catch(const IbPerfLib::IbMadException &exception) {
+            printf("An exception occured: %s", exception.what());
+        }
+
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 }

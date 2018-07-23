@@ -17,6 +17,7 @@
  */
 
 #include "IbPort.h"
+#include "IbMadException.h"
 
 namespace IbPerfLib {
 
@@ -49,7 +50,7 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
     m_madPort = mad_rpc_open_port(nullptr, 0, mgmt_classes, 3);
 
     if (m_madPort == nullptr) {
-        throw std::runtime_error("MAD: Failed to open port! (mad_rpc_open_port failed)");
+        throw IbMadException("MAD: Failed to open port! (mad_rpc_open_port failed)");
     }
 
     // Once the MAD-port has been opened, we can use ib_portid_set to initialize m_portId.
@@ -73,7 +74,7 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
     // srcport: The MAD-port.
     if (!pma_query_via(pmaQueryBuf, &m_portId, 0, DEFAULT_QUERY_TIMEOUT, CLASS_PORT_INFO, m_madPort)) {
         mad_rpc_close_port(m_madPort);
-        throw std::runtime_error("MAD: Failed to query port information! (pma_query_via failed)");
+        throw IbMadException("MAD: Failed to query port information! (pma_query_via failed)");
     }
 
     // Get the capability masks from the buffer.
@@ -97,7 +98,7 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
     // This function works similar to pma_query_via() (see above).
     if (!smp_query_via(smpQueryBuf, &m_portId, IB_ATTR_PORT_INFO, 0, 0, m_madPort)) {
         mad_rpc_close_port(m_madPort);
-        throw std::runtime_error("MAD: Failed to query device information! (smp_query_via failed)");
+        throw IbMadException("MAD: Failed to query device information! (smp_query_via failed)");
     }
 
     mad_decode_field(smpQueryBuf, IB_PORT_LINK_WIDTH_ACTIVE_F, &m_linkWidth);
@@ -147,13 +148,13 @@ void IbPort::ResetCounters() {
     if (!performance_reset_via(resetBuf, &m_portId, m_portNum, 0xffffffff, DEFAULT_QUERY_TIMEOUT,
                                IB_GSI_PORT_COUNTERS, m_madPort)) {
         mad_rpc_close_port(m_madPort);
-        throw std::runtime_error("Failed to reset performance counters!");
+        throw IbMadException("Failed to reset performance counters!");
     }
 
     if (!performance_reset_via(resetBuf, &m_portId, m_portNum, 0xffffffff, DEFAULT_QUERY_TIMEOUT,
                                IB_GSI_PORT_COUNTERS_EXT, m_madPort)) {
         mad_rpc_close_port(m_madPort);
-        throw std::runtime_error("Failed to reset extended performance counters!");
+        throw IbMadException("Failed to reset extended performance counters!");
     }
 }
 
@@ -180,7 +181,7 @@ void IbPort::RefreshCounters() {
 
     if (!pma_query_via(pmaQueryBuf, &m_portId, m_portNum, 0, IB_GSI_PORT_COUNTERS_EXT, m_madPort)) {
         mad_rpc_close_port(m_madPort);
-        throw std::runtime_error("Failed to query extended performance counters!");
+        throw IbMadException("Failed to query extended performance counters!");
     }
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_BYTES_F, &value64);
@@ -248,7 +249,7 @@ void IbPort::RefreshCounters() {
 
     if (!pma_query_via(pmaQueryBuf, &m_portId, m_portNum, 0, IB_GSI_PORT_COUNTERS, m_madPort)) {
         mad_rpc_close_port(m_madPort);
-        throw std::runtime_error("Failed to query performance counters!");
+        throw IbMadException("Failed to query performance counters!");
     }
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_RCV_F, &value32);
@@ -287,7 +288,7 @@ void IbPort::RefreshCounters() {
 
     if (!pma_query_via(pmaQueryBuf, &m_portId, m_portNum, 0, IB_GSI_PORT_COUNTERS, m_madPort)) {
         mad_rpc_close_port(m_madPort);
-        throw std::runtime_error("Failed to query performance counters!");
+        throw IbMadException("Failed to query performance counters!");
     }
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_SYM_F, &value32);
