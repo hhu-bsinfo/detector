@@ -73,7 +73,6 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
     // id: The type of information we want to query.
     // srcport: The MAD-port.
     if (!pma_query_via(pmaQueryBuf, &m_portId, 0, DEFAULT_QUERY_TIMEOUT, CLASS_PORT_INFO, m_madPort)) {
-        mad_rpc_close_port(m_madPort);
         throw IbMadException("MAD: Failed to query port information! (pma_query_via failed)");
     }
 
@@ -97,7 +96,6 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
     // Query the Subnet Management Agent for device-information. We do this to get the port's link width.
     // This function works similar to pma_query_via() (see above).
     if (!smp_query_via(smpQueryBuf, &m_portId, IB_ATTR_PORT_INFO, 0, 0, m_madPort)) {
-        mad_rpc_close_port(m_madPort);
         throw IbMadException("MAD: Failed to query device information! (smp_query_via failed)");
     }
 
@@ -147,13 +145,11 @@ void IbPort::ResetCounters() {
     // srcport: The MAD-port.
     if (!performance_reset_via(resetBuf, &m_portId, m_portNum, 0xffffffff, DEFAULT_QUERY_TIMEOUT,
                                IB_GSI_PORT_COUNTERS, m_madPort)) {
-        mad_rpc_close_port(m_madPort);
         throw IbMadException("Failed to reset performance counters!");
     }
 
     if (!performance_reset_via(resetBuf, &m_portId, m_portNum, 0xffffffff, DEFAULT_QUERY_TIMEOUT,
                                IB_GSI_PORT_COUNTERS_EXT, m_madPort)) {
-        mad_rpc_close_port(m_madPort);
         throw IbMadException("Failed to reset extended performance counters!");
     }
 }
@@ -180,7 +176,6 @@ void IbPort::RefreshCounters() {
     memset(pmaQueryBuf, 0, sizeof(pmaQueryBuf));
 
     if (!pma_query_via(pmaQueryBuf, &m_portId, m_portNum, 0, IB_GSI_PORT_COUNTERS_EXT, m_madPort)) {
-        mad_rpc_close_port(m_madPort);
         throw IbMadException("Failed to query extended performance counters!");
     }
 
@@ -248,7 +243,6 @@ void IbPort::RefreshCounters() {
     memset(pmaQueryBuf, 0, sizeof(pmaQueryBuf));
 
     if (!pma_query_via(pmaQueryBuf, &m_portId, m_portNum, 0, IB_GSI_PORT_COUNTERS, m_madPort)) {
-        mad_rpc_close_port(m_madPort);
         throw IbMadException("Failed to query performance counters!");
     }
 
@@ -287,7 +281,6 @@ void IbPort::RefreshCounters() {
     memset(pmaQueryBuf, 0, sizeof(pmaQueryBuf));
 
     if (!pma_query_via(pmaQueryBuf, &m_portId, m_portNum, 0, IB_GSI_PORT_COUNTERS, m_madPort)) {
-        mad_rpc_close_port(m_madPort);
         throw IbMadException("Failed to query performance counters!");
     }
 
