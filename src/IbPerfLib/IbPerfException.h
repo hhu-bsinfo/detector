@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
  * Copyright (C) 2018 Heinrich-Heine-Universitaet Duesseldorf,
  * Institute of Computer Science, Department Operating Systems
@@ -16,16 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef PROJECT_IBMADEXCEPTION_H
-#define PROJECT_IBMADEXCEPTION_H
+#ifndef PROJECT_IBPERFEXCEPTION_H
+#define PROJECT_IBPERFEXCEPTION_H
 
 #include <exception>
 #include <string>
-#include "IbPerfException.h"
 
 namespace IbPerfLib {
 
-class IbMadException : public IbPerfException {
+class IbPerfException : public std::exception {
 
 public:
 
@@ -34,15 +35,28 @@ public:
      *
      * @param message Error message
      */
-    explicit IbMadException(const std::string &message) :
-            IbPerfException("Error while performing a MAD operation: " + message) {
+    explicit IbPerfException(std::string message) :
+            message(std::move(message)) {
 
     }
 
     /**
      * Destructor.
      */
-    ~IbMadException() override = default;
+    ~IbPerfException() override = default;
+
+    /**
+     * Overriding function from std::exception.
+     */
+    const char *what() const noexcept override {
+        return message.c_str();
+    }
+
+
+private:
+
+    std::string message;
+
 };
 
 }
