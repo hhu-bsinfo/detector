@@ -64,3 +64,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
 # Add subdirectories
 add_subdirectory(IbPerfLib)
 add_subdirectory(IbPerfTest)
+add_subdirectory(IbDiagPerfTest)
