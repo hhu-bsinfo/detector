@@ -51,6 +51,8 @@ IbDiagPerfCounter::IbDiagPerfCounter(std::string deviceName, uint8_t portNumber)
     std::string path = "/sys/class/infiniband/" + m_deviceName + (m_portNumber > 0 ?
                        "/ports/" + std::to_string(m_portNumber) + "/hw_counters/" : "/hw_counters/");
 
+    printf("%s\n", path.c_str());
+
     files[0] = std::ifstream(path + "lifespan", std::ios::in);
     files[1] = std::ifstream(path + "rq_num_lle", std::ios::in);
     files[2] = std::ifstream(path + "rq_num_lpe", std::ios::in);

@@ -26,4 +26,4 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/include/infiniband")
 
-target_link_libraries(${PROJECT_NAME} IbPerfLib)
+target_link_libraries(${PROJECT_NAME} IbPerfLib -libverbs)

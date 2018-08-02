@@ -22,6 +22,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <verbs.h>
 #include <IbPerfLib/IbDiagPerfCounter.h>
 #include <IbPerfLib/IbFileException.h>
 #include <vector>
@@ -35,45 +36,43 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
+    int32_t numDevices;
     std::vector<IbPerfLib::IbDiagPerfCounter *> counters;
 
-    DIR *infinibandDirectory = opendir("/sys/class/infiniband/");
+    ibv_device **deviceList = ibv_get_device_list(&numDevices);
 
-    if (infinibandDirectory == nullptr) {
-        printf("Unable to open '/sys/class/infiniband/'! Error: %s", strerror(errno));
-        exit(1);
+    if(deviceList == nullptr) {
+        printf("Unable to get device list! Error: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
     }
 
-    dirent *device;
+    for(int32_t i = 0; i < numDevices; i++) {
+        const char *deviceName = ibv_get_device_name(deviceList[i]);
+        ibv_context *deviceContext = ibv_open_device(deviceList[i]);
 
-    while ((device = readdir(infinibandDirectory)) != nullptr) {
-        if (std::string(device->d_name) == "." || std::string(device->d_name) == "..") {
-            continue;
+        if(deviceContext == nullptr) {
+            printf("Unable to open device context!\n");
+            exit(EXIT_FAILURE);
         }
 
-        counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(device->d_name, 0));
+        ibv_device_attr deviceAttributes{};
+        int ret = ibv_query_device(deviceContext, &deviceAttributes);
 
-        std::string path = std::string("/sys/class/infiniband/") + device->d_name + "/ports/";
-
-        DIR *deviceDirectory = opendir(path.c_str());
-
-        if (deviceDirectory == nullptr) {
-            printf("Unable to open '%s'! Error: %s", path.c_str(), strerror(errno));
-            exit(1);
+        if(ret != 0) {
+            printf("Unable to query device attributes from '%s'! Error: %s\n", deviceName, strerror(ret));
+            exit(EXIT_FAILURE);
         }
 
-        dirent *port;
+        counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(deviceName, 0));
 
-        while ((port = readdir(deviceDirectory)) != nullptr) {
-            if (std::string(port->d_name) == "." || std::string(port->d_name) == "..") {
-                continue;
-            }
-
-            auto portNumber = static_cast<uint8_t>(strtoul(port->d_name, nullptr, 10));
-
-            counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(device->d_name, portNumber));
+        for(uint8_t j = 0; j < deviceAttributes.phys_port_cnt; j++) {
+            counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(deviceName, j));
         }
+
+        ibv_close_device(deviceContext);
     }
+
+    ibv_free_device_list(deviceList);
 
     signal(SIGINT, SignalHandler);
 
@@ -84,7 +83,7 @@ int main(int argc, char *argv[]) {
                 std::cout << *diagCounter << std::endl << std::endl;
             }
         } catch (const IbPerfLib::IbFileException &exception) {
-            printf("An exception occurred: %s", exception.what());
+            printf("An exception occurred: %s\n", exception.what());
         }
 
         std::this_thread::sleep_for(std::chrono::seconds(5));
