@@ -3,7 +3,10 @@
 A small library, which can be used to read the performance counters of all Infiniband devices in a network.
 
 This project uses the libibmad- and libibnetdisc-libraries to automatically discover all Infiniband devices in a
-network and read their performance counters.
+network and read their performance counters.  
+It can also operate in a compatibility mode in which IbPerfLib doesn't require root privileges by using the filesystem to read the performance counters. However, it will only detect local infiniband devices in this mode.
+
+It is also possible, to read the diagnostic performance counters of local infiniband devices.
 
 # Build instructions
 
@@ -16,7 +19,7 @@ To let cmake automatically download and build IbPerfLib for your project, you ma
 include(ExternalProject)
 
 ExternalProject_Add(IbPerfLib_git
-        GIT_REPOSITORY git@git.hhu.de:faruh100/IbPerfLib.git
+        GIT_REPOSITORY https://github.com/hhu-bsinfo/ibperf-lib.git
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}/IbPerfLib
         INSTALL_COMMAND "")
 
@@ -37,12 +40,26 @@ All you have left to do now, is to link your project against `IbPerfLib` using c
 
 # Run instructions
 
-IbPerfLib comes with a small test program called *IbPerfTest*, which scans your Infiniband network for devices and prints their counters to `stdout`.
+IbPerfLib comes with two small test programs called *IbPerfTest* and *IbDiagPerfTest*.  
+*IbPerfTest* scans your Infiniband network for devices and prints their counters to `stdout`.  
+*IbDiagPerfTest* prints the diagnostic counters of your local infiniband devices.
 
 On a Debian-based system, you can run theses commands to build and run *IbPerfTest*:
 
 ```
 sudo apt install cmake libibmad-dev libibumad-dev libibnetdisc-dev libopensm-dev
 ./build.sh
-sudo ./build/bin/IbPerfTest
+sudo ./build/bin/IbPerfTest mad
+```
+
+If you don't have root privileges, you can run IbPerfTest in compatability mode:
+
+```
+./build/bin/IbPerfTest compat
+```
+
+To run IbDiagPerfTest, run the following command:
+
+```
+./build/bin/IbDiagPerfTest
 ```
