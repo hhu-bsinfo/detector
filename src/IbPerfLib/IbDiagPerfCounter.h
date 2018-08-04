@@ -246,9 +246,8 @@ private:
      * Read a single diagnostic counter.
      *
      * @param index Index into files
-     * @param Reference to the counter variable to be set
      */
-    void readCounter(uint8_t index, uint64_t &counter);
+    uint64_t ReadCounter(uint8_t index);
 
 private:
     /* Diagnostic counter variables - Only available on local devices */

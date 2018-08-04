@@ -101,31 +101,31 @@ void IbDiagPerfCounter::ResetCounters() {
 }
 
 void IbDiagPerfCounter::RefreshCounters() {
-    readCounter(0, m_lifespan);
-    readCounter(1, m_rqLocalLengthErrors);
-    readCounter(2, m_rqLocalProtectionErrors);
-    readCounter(3, m_rqLocalQpProtectionErrors);
-    readCounter(4, m_rqOutOfSequenceErrors);
-    readCounter(5, m_rqRemoteAccessErrors);
-    readCounter(6, m_rqRemoteInvalidRequestErrors);
-    readCounter(7, m_rqRnrNakNum);
-    readCounter(8, m_rqCompletionQueueEntryErrors);
-    readCounter(9, m_sqBadResponseErrors);
-    readCounter(10, m_sqLocalLengthErrors);
-    readCounter(11, m_sqLocalProtectionErrors);
-    readCounter(12, m_sqLocalQpProtectionErrors);
-    readCounter(13, m_sqMemoryWindowBindErrors);
-    readCounter(14, m_sqOutOfSequenceErrors);
-    readCounter(15, m_sqRemoteAccessErrors);
-    readCounter(16, m_sqRemoteInvalidRequestErrors);
-    readCounter(17, m_sqRnrNakNum);
-    readCounter(18, m_sqRemoteOperationErrors);
-    readCounter(19, m_sqRnrNakRetriesExceededErrors);
-    readCounter(20, m_sqTransportRetriesExceededErrors);
-    readCounter(21, m_sqCompletionQueueEntryErrors);
+    m_lifespan = ReadCounter(0);
+    m_rqLocalLengthErrors = ReadCounter(1);
+    m_rqLocalProtectionErrors = ReadCounter(2);
+    m_rqLocalQpProtectionErrors = ReadCounter(3);
+    m_rqOutOfSequenceErrors = ReadCounter(4);
+    m_rqRemoteAccessErrors = ReadCounter(5);
+    m_rqRemoteInvalidRequestErrors = ReadCounter(6);
+    m_rqRnrNakNum = ReadCounter(7);
+    m_rqCompletionQueueEntryErrors = ReadCounter(8);
+    m_sqBadResponseErrors = ReadCounter(9);
+    m_sqLocalLengthErrors = ReadCounter(10);
+    m_sqLocalProtectionErrors = ReadCounter(11);
+    m_sqLocalQpProtectionErrors = ReadCounter(12);
+    m_sqMemoryWindowBindErrors = ReadCounter(13);
+    m_sqOutOfSequenceErrors = ReadCounter(14);
+    m_sqRemoteAccessErrors = ReadCounter(15);
+    m_sqRemoteInvalidRequestErrors = ReadCounter(16);
+    m_sqRnrNakNum = ReadCounter(17);
+    m_sqRemoteOperationErrors = ReadCounter(18);
+    m_sqRnrNakRetriesExceededErrors = ReadCounter(19);
+    m_sqTransportRetriesExceededErrors = ReadCounter(20);
+    m_sqCompletionQueueEntryErrors = ReadCounter(21);
 }
 
-void IbDiagPerfCounter::readCounter(uint8_t index, uint64_t &counter) {
+uint64_t IbDiagPerfCounter::ReadCounter(uint8_t index) {
     std::memset(buffer, 0, sizeof(buffer));
 
     if(!files[index].good()) {
@@ -135,7 +135,7 @@ void IbDiagPerfCounter::readCounter(uint8_t index, uint64_t &counter) {
     files[index].seekg(0, std::ios::beg);
     files[index].getline(buffer, sizeof(buffer));
 
-    counter = strtoull(buffer, nullptr, 10) - baseValues[index];
+    return strtoull(buffer, nullptr, 10) - baseValues[index];
 }
 
 }
