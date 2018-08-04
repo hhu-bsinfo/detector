@@ -31,4 +31,4 @@ add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/include/infiniband")
 
-target_link_libraries(${PROJECT_NAME} -libmad -libnetdisc)
+target_link_libraries(${PROJECT_NAME} -libverbs -libmad -libnetdisc)

@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <ibnetdisc.h>
+#include <verbs.h>
 #include <vector>
 #include "IbPort.h"
 
@@ -42,6 +43,13 @@ public:
      * @param node Pointer to an ibnd_node-struct, that has been initialized by the ibnetdisc-library.
      */
     explicit IbNode(ibnd_node_t *node);
+
+    /**
+     * Compatability constructor.
+     *
+     * Uses IbPortCompat instead of IbPort.
+     */
+    IbNode(std::string name, ibv_context *context);
 
     /**
      * Destructor.
@@ -96,16 +104,12 @@ public:
      * Write node information to an output stream.
      */
     friend std::ostream &operator<<(std::ostream &os, const IbNode &o) {
-        os << o.m_desc << ", "
+        os << "Name: " << o.m_desc << ", "
            << "GUID: 0x" << std::hex << o.m_guid << ", "
            << "Ports: " << std::dec << unsigned(o.m_numPorts) << std::endl;
 
-        for (uint8_t i = 0; i < o.m_numPorts; i++) {
-            os << "    " << *o.m_ports[i];
-
-            if (i < o.m_numPorts - 1) {
-                os << std::endl;
-            }
+        for (const auto &port : o.m_ports) {
+            os << "    " << *port;
         }
 
         return os;

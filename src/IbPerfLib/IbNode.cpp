@@ -1,3 +1,6 @@
+#include <utility>
+#include <IbPerfLib/Exception/IbVerbsException.h>
+
 /*
  * Copyright (C) 2018 Heinrich-Heine-Universitaet Duesseldorf,
  * Institute of Computer Science, Department Operating Systems
@@ -17,18 +20,44 @@
  */
 
 #include "IbNode.h"
+#include "IbPortCompat.h"
 
 namespace IbPerfLib {
 
+IbNode::IbNode(std::string name, ibv_context *context) : IbPerfCounter(),
+                                                         m_desc(std::move(name)),
+                                                         m_guid(0),
+                                                         m_numPorts(0) {
+    ibv_device_attr deviceAttributes{};
+    int ret = ibv_query_device(context, &deviceAttributes);
+
+    if(ret != 0) {
+        throw IbVerbsException("Unable to query device attributes of '" + name +
+                               "'! Error: " + std::string(strerror(ret)));
+    }
+
+    m_guid = deviceAttributes.node_guid;
+    m_numPorts = deviceAttributes.phys_port_cnt;
+
+    // Iterate over all of the node's ports and create an instance of IbPortCompat for each one.
+    for (uint8_t i = 0; i < m_numPorts; i++) {
+        ibv_port_attr portAttributes{};
+        ret = ibv_query_port(context, static_cast<uint8_t>(i + 1), &portAttributes);
+
+        if(ret != 0) {
+            throw IbVerbsException("Unable to query port attributes of '" + name +
+                                    + ", port " + std::to_string(i) + "'! Error: " + std::string(strerror(ret)));
+        }
+
+        m_ports.push_back(new IbPortCompat(m_desc, portAttributes, static_cast<uint8_t>(i + 1)));
+    }
+}
+
 IbNode::IbNode(ibnd_node_t *node) : IbPerfCounter(),
+                                    m_desc(node->nodedesc),
                                     m_guid(node->guid),
                                     m_numPorts(static_cast<uint8_t>(node->numports)) {
-    char tmpDesc[IB_SMP_DATA_SIZE];
-    memcpy(tmpDesc, node->nodedesc, IB_SMP_DATA_SIZE);
-
-    m_desc = std::string(tmpDesc);
-
-    // Iterate over all of the node's ports an create an instance of IbPort for each one.
+    // Iterate over all of the node's ports and create an instance of IbPort for each one.
     for (uint8_t i = 0; i < m_numPorts; i++) {
         ibnd_port *currentPort = node->ports[i + 1];
 
