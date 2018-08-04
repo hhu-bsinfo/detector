@@ -19,12 +19,49 @@
 #include <algorithm>
 #include "IbFabric.h"
 #include "IbMadException.h"
+#include "IbFileException.h"
+#include "IbVerbsException.h"
+#include "IbDiagPerfCounter.h"
 
 namespace IbPerfLib {
 
-IbFabric::IbFabric() :
+IbFabric::IbFabric(bool compatibility) :
         m_fabric(nullptr),
         m_numNodes(0) {
+
+    if(compatibility) {
+        discoverLocalDevices();
+    } else {
+        discoverFabric();
+    }
+
+    std::sort(m_nodes.begin(), m_nodes.end(),
+              [](auto &&l, auto &&r) { return l->GetDescription() < r->GetDescription(); });
+}
+
+void IbFabric::RefreshCounters() {
+    for (IbNode *node : m_nodes) {
+        node->RefreshCounters();
+    }
+}
+
+void IbFabric::ResetCounters() {
+    for (IbNode *node : m_nodes) {
+        node->ResetCounters();
+    }
+}
+
+IbFabric::~IbFabric() {
+    for (IbNode *node : m_nodes) {
+        delete node;
+    }
+
+    if(m_fabric != nullptr) {
+        ibnd_destroy_fabric(m_fabric);
+    }
+}
+
+void IbFabric::discoverFabric() {
     // The config contains parameters for ibnd_discover_fabric.
     // We don't need any special parameters and just set them all to zero.
     ibnd_config_t config = {0};
@@ -51,32 +88,43 @@ IbFabric::IbFabric() :
     // Iterate over all nodes and create an instance of IbPort for each one.
     do {
         m_numNodes++;
-        m_nodes.push_back(new IbNode(currentNode));
+        m_nodes.emplace_back(new IbNode(currentNode));
         currentNode = currentNode->next;
     } while (currentNode != nullptr);
-
-    std::sort(m_nodes.begin(), m_nodes.end(),
-              [](auto &&l, auto &&r) { return l->GetDescription() < r->GetDescription(); });
 }
 
-void IbFabric::RefreshCounters() {
-    for (IbNode *node : m_nodes) {
-        node->RefreshCounters();
-    }
-}
+void IbFabric::discoverLocalDevices() {
+    int32_t numDevices;
+    ibv_device **deviceList = ibv_get_device_list(&numDevices);
 
-void IbFabric::ResetCounters() {
-    for (IbNode *node : m_nodes) {
-        node->ResetCounters();
-    }
-}
-
-IbFabric::~IbFabric() {
-    for (IbNode *node : m_nodes) {
-        delete node;
+    if(deviceList == nullptr) {
+        throw IbFileException("Unable to get device list! Error: " + std::string(strerror(errno)));
     }
 
-    ibnd_destroy_fabric(m_fabric);
+    for(int32_t i = 0; i < numDevices; i++) {
+        const char *deviceName = ibv_get_device_name(deviceList[i]);
+        ibv_context *deviceContext = ibv_open_device(deviceList[i]);
+
+        if(deviceContext == nullptr) {
+            throw IbVerbsException("Unable to open device context!");
+        }
+
+        ibv_device_attr attributes{};
+        int ret = ibv_query_device(deviceContext, &attributes);
+
+        if(ret != 0) {
+            throw IbVerbsException("Unable to query device attributes from '" + std::string(deviceName) +
+                "'! Error: " + std::string(strerror(ret)));
+        }
+
+        m_nodes.emplace_back(new IbPerfLib::IbNode(deviceName, deviceContext));
+
+        ibv_close_device(deviceContext);
+
+        m_numNodes++;
+    }
+
+    ibv_free_device_list(deviceList);
 }
 
 }

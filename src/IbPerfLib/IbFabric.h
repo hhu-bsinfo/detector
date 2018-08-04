@@ -33,8 +33,15 @@ class IbFabric {
 public:
     /**
      * Constructor.
+     *
+     * Set to compatibility to true, to activate compatibility mode.
+     * In this mode, IbPerfLib will use the filesystem to query performance counters instead of the ibmad-library.
+     * In contrary to the ibmad-library, this mode does not require root privileges,
+     * but it will only detect local infiniband devices.
+     *
+     * @param compatibility Set to true, to activate compatibility mode.
      */
-    IbFabric();
+    explicit IbFabric(bool compatibility = true);
 
     /**
      * Destructor.
@@ -42,7 +49,7 @@ public:
     ~IbFabric();
 
     /**
-     * Refreshes the performance counters on all nodes in the fabbric.
+     * Refreshes the performance counters on all nodes in the fabric.
      */
     void RefreshCounters();
 
@@ -69,7 +76,7 @@ public:
      * Write fabric information to an output stream.
      */
     friend std::ostream &operator<<(std::ostream &os, const IbFabric &o) {
-        os << "Discovered " << o.m_numNodes << " nodes in the fabric:" << std::endl;
+        os << "Discovered " << o.m_numNodes << (o.m_numNodes == 1 ? " node" : " nodes") << " in the fabric:" << std::endl;
 
         for (const auto &node : o.m_nodes) {
             os << *node << std::endl;
@@ -77,6 +84,12 @@ public:
 
         return os;
     }
+
+private:
+
+    void discoverFabric();
+
+    void discoverLocalDevices();
 
 private:
     /**
