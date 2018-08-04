@@ -31,9 +31,23 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
-    IbPerfLib::IbFabric fabric;
+    if(argc < 2) {
+        printf("Usage: ./IbPerfTest <mad/compat>\n");
+        exit(EXIT_FAILURE);
+    }
 
-    fabric.ResetCounters();
+    bool compat;
+
+    if(!strcmp(argv[1], "mad")) {
+        compat = false;
+    } else if(!strcmp(argv[1], "compat")) {
+        compat = true;
+    } else {
+        printf("Usage: ./IbPerfTest <mad/compat>\n");
+        exit(EXIT_FAILURE);
+    }
+
+    IbPerfLib::IbFabric fabric(compat);
 
     signal(SIGINT, SignalHandler);
 
@@ -41,7 +55,7 @@ int main(int argc, char *argv[]) {
         try {
             fabric.RefreshCounters();
             std::cout << fabric;
-        } catch(const IbPerfLib::IbMadException &exception) {
+        } catch(const IbPerfLib::IbPerfException &exception) {
             printf("An exception occured: %s", exception.what());
         }
 
