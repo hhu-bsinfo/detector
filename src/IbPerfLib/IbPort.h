@@ -37,6 +37,7 @@
 #include <iostream>
 #include <infiniband/mad.h>
 #include <infiniband/iba/ib_types.h>
+#include <infiniband/verbs.h>
 #include "IbPerfCounter.h"
 
 namespace IbPerfLib {
@@ -56,7 +57,7 @@ public:
      * @param lid The port's local id
      * @param portNum The number, that the port has on its device.
      */
-    explicit IbPort(uint16_t lid, uint8_t portNum);
+    IbPort(uint16_t lid, uint8_t portNum);
 
     /**
      * Destructor.
@@ -88,10 +89,19 @@ public:
         return os
                 << "Port Number: " << unsigned(o.m_portNum) << ", "
                 << "LID: " << o.m_lid << ", "
-                << "Link width: " << unsigned(o.m_linkWidth) << "x "
-                << "XmitBytes: " << o.GetXmitDataBytes() << " Bytes "
-                << "RcvBytes: " << o.GetRcvDataBytes() << " Bytes";
+                << "Link width: " << unsigned(o.m_linkWidth) << "x, "
+                << "XmitBytes: " << o.GetXmitDataBytes() << " Bytes, "
+                << "RcvBytes: " << o.GetRcvDataBytes() << " Bytes" << std::endl;
     }
+
+protected:
+    /**
+     * Compatibility constructor.
+     *
+     * @param lid The port's local id
+     * @param portNum The number, that the port has on its device.
+     */
+    IbPort(ibv_port_attr attributes, uint8_t portNum);
 
 private:
     /**

@@ -21,6 +21,34 @@
 
 namespace IbPerfLib {
 
+IbPort::IbPort(ibv_port_attr attributes, uint8_t portNum) : IbPerfCounter(),
+                                                            m_lid(attributes.lid),
+                                                            m_portNum(portNum),
+                                                            m_linkWidth(0),
+                                                            m_madPort(nullptr),
+                                                            m_portId({0}),
+                                                            m_isExtendedWidthSupported(false),
+                                                            m_isAdditionalExtendedPortCountersSupported(false),
+                                                            m_isXmitWaitSupported(false) {
+    switch (m_linkWidth) {
+        case 1:
+            m_linkWidth = 1;
+            break;
+        case 2:
+            m_linkWidth = 4;
+            break;
+        case 4:
+            m_linkWidth = 8;
+            break;
+        case 8:
+            m_linkWidth = 12;
+            break;
+        default:
+            m_linkWidth = 1;
+            break;
+    }
+}
+
 IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
                                                 m_lid(lid),
                                                 m_portNum(portNum),
@@ -122,7 +150,9 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
 
 IbPort::~IbPort() {
     // Close the MAD-port.
-    mad_rpc_close_port(m_madPort);
+    if(m_madPort != nullptr) {
+        mad_rpc_close_port(m_madPort);
+    }
 }
 
 void IbPort::ResetCounters() {

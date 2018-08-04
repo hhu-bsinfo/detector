@@ -24,7 +24,8 @@ set(SOURCE_FILES
         ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPort.cpp
         ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbNode.cpp
         ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbFabric.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbDiagPerfCounter.cpp)
+        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbDiagPerfCounter.cpp
+        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPortCompat.cpp)
  
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
