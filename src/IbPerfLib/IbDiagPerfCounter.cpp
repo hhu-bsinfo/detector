@@ -18,7 +18,7 @@
 
 #include <cstring>
 #include <iostream>
-#include "IbFileException.h"
+#include "IbPerfLib/Exception/IbFileException.h"
 #include "IbDiagPerfCounter.h"
 
 namespace IbPerfLib {

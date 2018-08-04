@@ -19,7 +19,7 @@
 #include <csignal>
 #include <chrono>
 #include <thread>
-#include <IbPerfLib/IbMadException.h>
+#include <IbPerfLib/Exception/IbMadException.h>
 #include "IbPerfLib/IbFabric.h"
 
 bool isRunning = true;

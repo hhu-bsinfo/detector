@@ -24,7 +24,7 @@
 #include <thread>
 #include <verbs.h>
 #include <IbPerfLib/IbDiagPerfCounter.h>
-#include <IbPerfLib/IbFileException.h>
+#include <IbPerfLib/Exception/IbFileException.h>
 #include <vector>
 
 bool isRunning = true;

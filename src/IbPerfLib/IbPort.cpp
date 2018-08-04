@@ -17,7 +17,7 @@
  */
 
 #include "IbPort.h"
-#include "IbMadException.h"
+#include "IbPerfLib/Exception/IbMadException.h"
 
 namespace IbPerfLib {
 

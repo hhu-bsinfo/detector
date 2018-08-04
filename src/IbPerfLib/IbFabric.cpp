@@ -18,9 +18,9 @@
 
 #include <algorithm>
 #include "IbFabric.h"
-#include "IbMadException.h"
-#include "IbFileException.h"
-#include "IbVerbsException.h"
+#include "IbPerfLib/Exception/IbMadException.h"
+#include "IbPerfLib/Exception/IbFileException.h"
+#include "IbPerfLib/Exception/IbVerbsException.h"
 #include "IbDiagPerfCounter.h"
 
 namespace IbPerfLib {

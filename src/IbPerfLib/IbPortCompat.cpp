@@ -19,7 +19,7 @@
 #include <cstring>
 #include <iostream>
 #include "IbPortCompat.h"
-#include "IbFileException.h"
+#include "IbPerfLib/Exception/IbFileException.h"
 
 namespace IbPerfLib {
 
