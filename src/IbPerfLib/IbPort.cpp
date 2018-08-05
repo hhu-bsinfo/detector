@@ -189,8 +189,6 @@ void IbPort::RefreshCounters() {
     uint32_t value32;
     uint8_t pmaQueryBuf[QUERY_BUF_SIZE];
 
-    ResetVariables();
-
     // Query the port's performance counters.
     //
     // Reading the performance counters works as follows:
@@ -210,62 +208,62 @@ void IbPort::RefreshCounters() {
     }
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_BYTES_F, &value64);
-    m_xmitDataBytes += value64 * m_linkWidth;
+    m_xmitDataBytes = value64 * m_linkWidth;
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_RCV_BYTES_F, &value64);
-    m_rcvDataBytes += value64 * m_linkWidth;
+    m_rcvDataBytes = value64 * m_linkWidth;
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_PKTS_F, &value64);
-    m_xmitPkts += value64;
+    m_xmitPkts = value64;
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_RCV_PKTS_F, &value64);
-    m_rcvPkts += value64;
+    m_rcvPkts = value64;
 
     // Get the extended 64-bit uni- and multicast-counters, if supported by the device.
     if (m_isExtendedWidthSupported) {
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_UPKTS_F, &value64);
-        m_unicastXmitPkts += value64;
+        m_unicastXmitPkts = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_RCV_UPKTS_F, &value64);
-        m_unicastRcvPkts += value64;
+        m_unicastRcvPkts = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_MPKTS_F, &value64);
-        m_multicastXmitPkts += value64;
+        m_multicastXmitPkts = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_RCV_MPKTS_F, &value64);
-        m_multicastRcvPkts += value64;
+        m_multicastRcvPkts = value64;
     }
 
 #if USE_ADDITIONAL_EXTENDED_COUNTERS
     // Get the extended 64-bit error-counters, if supported by the device.
     if (m_isAdditionalExtendedPortCountersSupported) {
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_ERR_RCV_F, &value64);
-        m_rcvErrors += value64;
+        m_rcvErrors = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_ERR_PHYSRCV_F, &value64);
-        m_rcvRemotePhysicalErrors += value64;
+        m_rcvRemotePhysicalErrors = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_ERR_SWITCH_REL_F, &value64);
-        m_rcvSwitchRelayErrors += value64;
+        m_rcvSwitchRelayErrors = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_DISCARDS_F, &value64);
-        m_xmitDiscards += value64;
+        m_xmitDiscards = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_ERR_XMTCONSTR_F, &value64);
-        m_xmitConstraintErrors += value64;
+        m_xmitConstraintErrors = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_ERR_RCVCONSTR_F, &value64);
-        m_rcvConstraintErrors += value64;
+        m_rcvConstraintErrors = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_ERR_LOCALINTEG_F, &value64);
-        m_localLinkIntegrityErrors += value64;
+        m_localLinkIntegrityErrors = value64;
 
         mad_decode_field(pmaQueryBuf, IB_PC_EXT_ERR_EXCESS_OVR_F, &value64);
-        m_excessiveBufferOverrunErrors += value64;
+        m_excessiveBufferOverrunErrors = value64;
 
         if (m_isXmitWaitSupported) {
             mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_WAIT_F, &value64);
-            m_xmitWait += value64;
+            m_xmitWait = value64;
         }
     } else {
 #endif
@@ -277,32 +275,32 @@ void IbPort::RefreshCounters() {
     }
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_RCV_F, &value32);
-    m_rcvErrors += value32;
+    m_rcvErrors = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_PHYSRCV_F, &value32);
-    m_rcvRemotePhysicalErrors += value32;
+    m_rcvRemotePhysicalErrors = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_SWITCH_REL_F, &value32);
-    m_rcvSwitchRelayErrors += value32;
+    m_rcvSwitchRelayErrors = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_XMT_DISCARDS_F, &value32);
-    m_xmitDiscards += value32;
+    m_xmitDiscards = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_XMTCONSTR_F, &value32);
-    m_xmitConstraintErrors += value32;
+    m_xmitConstraintErrors = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_RCVCONSTR_F, &value32);
-    m_rcvConstraintErrors += value32;
+    m_rcvConstraintErrors = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_LOCALINTEG_F, &value32);
-    m_localLinkIntegrityErrors += value32;
+    m_localLinkIntegrityErrors = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_EXCESS_OVR_F, &value32);
-    m_excessiveBufferOverrunErrors += value32;
+    m_excessiveBufferOverrunErrors = value32;
 
     if (m_isXmitWaitSupported) {
         mad_decode_field(pmaQueryBuf, IB_PC_XMT_WAIT_F, &value32);
-        m_xmitWait += value32;
+        m_xmitWait = value32;
     }
 #if USE_ADDITIONAL_EXTENDED_COUNTERS
     }
@@ -315,16 +313,16 @@ void IbPort::RefreshCounters() {
     }
 
     mad_decode_field(pmaQueryBuf, IB_PC_ERR_SYM_F, &value32);
-    m_symbolErrors += value32;
+    m_symbolErrors = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_LINK_DOWNED_F, &value32);
-    m_linkDowned += value32;
+    m_linkDowned = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_LINK_RECOVERS_F, &value32);
-    m_linkRecoveries += value32;
+    m_linkRecoveries = value32;
 
     mad_decode_field(pmaQueryBuf, IB_PC_VL15_DROPPED_F, &value32);
-    m_vl15Dropped += value32;
+    m_vl15Dropped = value32;
 }
 
 }
