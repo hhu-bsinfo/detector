@@ -59,7 +59,7 @@ if (insource)
 endif ()
 
 # Set compiler-flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -fPIC")
 
 # Add subdirectories
 add_subdirectory(IbPerfLib)
