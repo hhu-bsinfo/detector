@@ -55,7 +55,7 @@ public:
      * Constructor.
      *
      * @param lid The port's local id
-     * @param portNum The number, that the port has on its device.
+     * @param portNum The number, that the port has on its device
      */
     IbPort(uint16_t lid, uint8_t portNum);
 
@@ -76,10 +76,17 @@ public:
     void RefreshCounters() override;
 
     /**
-    * Get the number, that the port has on its device.
-    */
+     * Get the number, that the port has on its device.
+     */
     uint8_t GetNum() {
         return m_portNum;
+    }
+
+    /**
+     * Get the port's local id.
+     */
+    uint16_t GetLid() {
+        return m_lid;
     }
 
     /**
@@ -94,16 +101,24 @@ public:
                 << "RcvBytes: " << o.GetRcvDataBytes() << " Bytes" << std::endl;
     }
 
+private:
+    /**
+     * Calculate the real link witdh by using the active_width from ibv_port_attr.
+     *
+     * @param The value active_width from an ibv_port_attr_struct.
+     */
+    uint8_t CalcLinkWidth(uint8_t activeWidth);
+
 protected:
     /**
      * Compatibility constructor.
      *
-     * @param lid The port's local id
-     * @param portNum The number, that the port has on its device.
+     * @param attributes The port's attributes
+     * @param portNum The number, that the port has on its device
      */
     IbPort(ibv_port_attr attributes, uint8_t portNum);
 
-private:
+protected:
     /**
      * The lid of the port, that shall be monitored.
      */
@@ -119,6 +134,7 @@ private:
      */
     uint8_t m_linkWidth;
 
+private:
     /**
      * Pointer to a mad-port. A port can be opened by calling mad_rpc_open_port().
      * A port must be opened before it is possible to query any data from the Infiniband device.

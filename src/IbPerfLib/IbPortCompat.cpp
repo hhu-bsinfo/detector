@@ -76,8 +76,8 @@ void IbPortCompat::ResetCounters() {
 }
 
 void IbPortCompat::RefreshCounters() {
-    m_xmitDataBytes = ReadCounter(0) * 4;
-    m_rcvDataBytes = ReadCounter(1) * 4;
+    m_xmitDataBytes = ReadCounter(0) * m_linkWidth;
+    m_rcvDataBytes = ReadCounter(1) * m_linkWidth;
     m_xmitPkts = ReadCounter(2);
     m_rcvPkts = ReadCounter(3);
     m_unicastXmitPkts = ReadCounter(4);

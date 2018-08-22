@@ -24,29 +24,13 @@ namespace IbPerfLib {
 IbPort::IbPort(ibv_port_attr attributes, uint8_t portNum) : IbPerfCounter(),
                                                             m_lid(attributes.lid),
                                                             m_portNum(portNum),
-                                                            m_linkWidth(0),
+                                                            m_linkWidth(CalcLinkWidth(attributes.active_width)),
                                                             m_madPort(nullptr),
                                                             m_portId({0}),
                                                             m_isExtendedWidthSupported(false),
                                                             m_isAdditionalExtendedPortCountersSupported(false),
                                                             m_isXmitWaitSupported(false) {
-    switch (m_linkWidth) {
-        case 1:
-            m_linkWidth = 1;
-            break;
-        case 2:
-            m_linkWidth = 4;
-            break;
-        case 4:
-            m_linkWidth = 8;
-            break;
-        case 8:
-            m_linkWidth = 12;
-            break;
-        default:
-            m_linkWidth = 1;
-            break;
-    }
+
 }
 
 IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
@@ -63,6 +47,7 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
     int mgmt_classes[3] = {IB_SMI_CLASS, IB_SA_CLASS, IB_PERFORMANCE_CLASS};
     uint16_t capabilityMask;
     uint32_t capabilityMask2;
+    uint8_t activeWidth;
 
     memset(pmaQueryBuf, 0, sizeof(pmaQueryBuf));
     memset(smpQueryBuf, 0, sizeof(smpQueryBuf));
@@ -127,25 +112,9 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
         throw IbMadException("MAD: Failed to query device information! (smp_query_via failed)");
     }
 
-    mad_decode_field(smpQueryBuf, IB_PORT_LINK_WIDTH_ACTIVE_F, &m_linkWidth);
+    mad_decode_field(smpQueryBuf, IB_PORT_LINK_WIDTH_ACTIVE_F, &activeWidth);
 
-    switch (m_linkWidth) {
-        case 1:
-            m_linkWidth = 1;
-            break;
-        case 2:
-            m_linkWidth = 4;
-            break;
-        case 4:
-            m_linkWidth = 8;
-            break;
-        case 8:
-            m_linkWidth = 12;
-            break;
-        default:
-            m_linkWidth = 1;
-            break;
-    }
+    m_linkWidth = CalcLinkWidth(activeWidth);
 }
 
 IbPort::~IbPort() {
@@ -323,6 +292,21 @@ void IbPort::RefreshCounters() {
 
     mad_decode_field(pmaQueryBuf, IB_PC_VL15_DROPPED_F, &value32);
     m_vl15Dropped = value32;
+}
+
+uint8_t IbPort::CalcLinkWidth(uint8_t activeWidth) {
+    switch (activeWidth) {
+        case 1:
+            return 1;
+        case 2:
+            return 4;
+        case 4:
+            return 8;
+        case 8:
+            return 12;
+        default:
+            return 1;
+    }
 }
 
 }

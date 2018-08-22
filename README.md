@@ -32,10 +32,14 @@ set_property(TARGET IbPerfLib PROPERTY IMPORTED_LOCATION ${binary_dir}/ar/libIbP
 add_dependencies(IbPerfLib IbPerfLib_git)
 
 include_directories(${source_dir}/src)
-
 ```
 
-All you have left to do now, is to link your project against `IbPerfLib` using cmake's `target_link_libraries()` instruction.
+All you have left to do now, is to link your project against `IbPerfLib`, `ibverbs`, `ibmad`, and `ibnetdisc` using cmake's `target_link_libraries()` instruction. You also may need to add `/usr/include/infiniband` to your include directories.
+
+```
+target_link_libraries(IbPerfLib ibverbs ibmad ibnetdisc)
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -I/usr/include/infiniband)
+```
 
 
 # Run instructions
