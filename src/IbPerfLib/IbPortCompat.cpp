@@ -103,7 +103,6 @@ uint64_t IbPortCompat::ReadCounter(uint8_t index) {
     std::memset(buffer, 0, sizeof(buffer));
 
     if(!files[index].good()) {
-        printf("%d\n", index);
         throw IbFileException("Unable to read file!");
     }
 
