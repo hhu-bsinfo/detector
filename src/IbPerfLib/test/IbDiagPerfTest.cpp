@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
         counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(deviceName, 0));
 
-        for(uint8_t j = 0; j < deviceAttributes.phys_port_cnt; j++) {
+        for(uint8_t j = 1; j < deviceAttributes.phys_port_cnt + 1; j++) {
             counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(deviceName, j));
         }
 
