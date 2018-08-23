@@ -36,7 +36,7 @@ IbNode::IbNode(std::string name, ibv_context *context) : IbPerfCounter(),
                                "'! Error: " + std::string(strerror(ret)));
     }
 
-    m_guid = deviceAttributes.node_guid;
+    m_guid = htonll(deviceAttributes.node_guid);
     m_numPorts = deviceAttributes.phys_port_cnt;
 
     // Iterate over all of the node's ports and create an instance of IbPortCompat for each one.
