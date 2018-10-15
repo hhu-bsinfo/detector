@@ -21,9 +21,10 @@
 
 // The extended 64-bit versions of rcvErrors, rcvRemotePhysicalErrors, rcvSwitchRelayErrors, xmitDiscards,
 // xmitConstraintErrors, rcvConstraintErrors, localLinkIntegrityErrors, excessiveBufferOverrunErrors, xmitWait
-// are only available with libibmad version 2.0 or higher. Most Linux distributions still ship with version 1.3.
-// If you have version 2.0 or higher installed, you can set this macro to 1.
+// are only available in new versions of libibmad. By default build script checks, if the counters are availabe.
+#ifndef USE_ADDITIONAL_EXTENDED_COUNTERS
 #define USE_ADDITIONAL_EXTENDED_COUNTERS 0
+#endif
 
 #define DEFAULT_QUERY_TIMEOUT 0
 #define QUERY_BUF_SIZE 1536

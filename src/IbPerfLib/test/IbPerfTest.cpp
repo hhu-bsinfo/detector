@@ -47,6 +47,12 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
+    if(USE_ADDITIONAL_EXTENDED_COUNTERS) {
+        printf("Additional extended counters are supported!\n\n");
+    } else {
+        printf("Additional extended counters are not supported!\n\n");
+    }
+
     IbPerfLib::IbFabric fabric(compat);
 
     signal(SIGINT, SignalHandler);
