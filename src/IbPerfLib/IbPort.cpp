@@ -27,6 +27,7 @@ IbPort::IbPort(ibv_port_attr attributes, uint8_t portNum) : IbPerfCounter(),
                                                             m_linkWidth(CalcLinkWidth(attributes.active_width)),
                                                             m_madPort(nullptr),
                                                             m_portId({0}),
+                                                            m_nodeType(IB_NODE_CA),
                                                             m_isExtendedWidthSupported(false),
                                                             m_isAdditionalExtendedPortCountersSupported(false),
                                                             m_isXmitWaitSupported(false) {
@@ -39,6 +40,7 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
                                                 m_linkWidth(0),
                                                 m_madPort(nullptr),
                                                 m_portId({0}),
+                                                m_nodeType(IB_NODE_CA),
                                                 m_isExtendedWidthSupported(false),
                                                 m_isAdditionalExtendedPortCountersSupported(false),
                                                 m_isXmitWaitSupported(false) {
@@ -106,10 +108,18 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
         m_isAdditionalExtendedPortCountersSupported = true;
     }
 
-    // Query the Subnet Management Agent for device-information. We do this to get the port's link width.
+    // Query the Subnet Management Agent for device-information. We do this to get the node type.
+    // This function works similar to pma_query_via() (see above).
+    if (!smp_query_via(smpQueryBuf, &m_portId, IB_ATTR_NODE_INFO, 0, 0, m_madPort)) {
+        throw IbMadException("MAD: Failed to query device information! (smp_query_via failed)");
+    }
+
+    mad_decode_field(smpQueryBuf, IB_NODE_TYPE_F, &m_nodeType);
+
+    // Query the Subnet Management Agent for port-information. We do this to get the port's link width.
     // This function works similar to pma_query_via() (see above).
     if (!smp_query_via(smpQueryBuf, &m_portId, IB_ATTR_PORT_INFO, 0, 0, m_madPort)) {
-        throw IbMadException("MAD: Failed to query device information! (smp_query_via failed)");
+        throw IbMadException("MAD: Failed to query port information! (smp_query_via failed)");
     }
 
     mad_decode_field(smpQueryBuf, IB_PORT_LINK_WIDTH_ACTIVE_F, &activeWidth);
@@ -181,6 +191,17 @@ void IbPort::RefreshCounters() {
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_RCV_BYTES_F, &value64);
     m_rcvDataBytes = value64 * m_linkWidth;
+
+    /*
+     *  TODO (Fabian Ruhland): For some reason, when I reset the counters on our switch, only the lower 40-bits of
+     *  the RCV_BYTES counter are set to zero. The most significant 24-bits are set to 0x0003fc, which leads to a value
+     *  of more than 1 peta-byte after a reset. As a quick fix, I always set the the most significant 24-bits of
+     *  this counter to zero manually.
+     *  This issue should be investigated further and, if possible, a better solution should be developed.
+     */
+    if(m_nodeType == IB_NODE_SWITCH) {
+        m_rcvDataBytes = m_rcvDataBytes & 0x000000ffffffffffULL;
+    }
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_PKTS_F, &value64);
     m_xmitPkts = value64;

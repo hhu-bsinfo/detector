@@ -147,6 +147,8 @@ private:
      */
     ib_portid_t m_portId;
 
+    MAD_NODE_TYPE m_nodeType;
+
     /**
      * Indicates, whether or not the Infiniband device supports the extended counters for Uni- and Multicast-operations.
      */
