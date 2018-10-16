@@ -34,7 +34,7 @@ public:
      *
      * @param message Error message
      */
-    explicit IbVerbsException(const std::string &message) :
+    explicit IbVerbsException(const std::string &message) noexcept :
             IbPerfException("Error while performing a Verbs operation: " + message) {
 
     }

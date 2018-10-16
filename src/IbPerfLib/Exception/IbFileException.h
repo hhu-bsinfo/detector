@@ -34,7 +34,7 @@ public:
      *
      * @param message Error message
      */
-    explicit IbFileException(const std::string &message) :
+    explicit IbFileException(const std::string &message) noexcept :
             IbPerfException("Error while performing a File operation: " + message) {
 
     }

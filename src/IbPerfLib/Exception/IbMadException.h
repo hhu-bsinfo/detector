@@ -34,7 +34,7 @@ public:
      *
      * @param message Error message
      */
-    explicit IbMadException(const std::string &message) :
+    explicit IbMadException(const std::string &message) noexcept :
             IbPerfException("Error while performing a MAD operation: " + message) {
 
     }

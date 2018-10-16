@@ -35,9 +35,13 @@ public:
      *
      * @param message Error message
      */
-    explicit IbPerfException(std::string message) :
+    explicit IbPerfException(std::string message) noexcept :
             message(std::move(message)) {
 
+    }
+
+    IbPerfException(const IbPerfException &copy) noexcept {
+        this->message = copy.message;
     }
 
     /**
