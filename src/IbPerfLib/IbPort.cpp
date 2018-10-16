@@ -94,17 +94,17 @@ IbPort::IbPort(uint16_t lid, uint8_t portNum) : IbPerfCounter(),
     // Get the capability masks from the buffer.
     memcpy(&capabilityMask, pmaQueryBuf + 2, sizeof(capabilityMask));
     memcpy(&capabilityMask2, pmaQueryBuf + 4, sizeof(capabilityMask2));
-    capabilityMask2 = htonl(ntohl(capabilityMask2) >> 5);
+    capabilityMask2 = htonl(ntohl(capabilityMask2) >> 5u);
 
-    if (capabilityMask & IB_PM_EXT_WIDTH_SUPPORTED) {
+    if (capabilityMask & static_cast<uint16_t>(IB_PM_EXT_WIDTH_SUPPORTED)) {
         m_isExtendedWidthSupported = true;
     }
 
-    if (capabilityMask & IB_PM_PC_XMIT_WAIT_SUP) {
+    if (capabilityMask & static_cast<uint16_t>(IB_PM_PC_XMIT_WAIT_SUP)) {
         m_isXmitWaitSupported = true;
     }
 
-    if (capabilityMask2 & IB_PM_IS_ADDL_PORT_CTRS_EXT_SUP) {
+    if (capabilityMask2 & static_cast<uint32_t>(IB_PM_IS_ADDL_PORT_CTRS_EXT_SUP)) {
         m_isAdditionalExtendedPortCountersSupported = true;
     }
 
