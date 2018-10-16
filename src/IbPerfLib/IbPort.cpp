@@ -190,18 +190,19 @@ void IbPort::RefreshCounters() {
     m_xmitDataBytes = value64 * m_linkWidth;
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_RCV_BYTES_F, &value64);
-    m_rcvDataBytes = value64 * m_linkWidth;
 
     /*
      *  TODO (Fabian Ruhland): For some reason, when I reset the counters on our switch, only the lower 40-bits of
-     *  the RCV_BYTES counter are set to zero. The most significant 24-bits are set to 0x0003fc, which leads to a value
+     *  the RCV_BYTES counter are set to zero. The most significant 24-bits are set to 0x0000ff, which leads to a value
      *  of more than 1 peta-byte after a reset. As a quick fix, I always set the the most significant 24-bits of
-     *  this counter to zero manually.
+     *  this counter to zero manually by performing a bitwise AND with 0x000000ffffffffff.
      *  This issue should be investigated further and, if possible, a better solution should be developed.
      */
     if(m_nodeType == IB_NODE_SWITCH) {
-        m_rcvDataBytes = m_rcvDataBytes & 0x000000ffffffffffULL;
+        value64 &= 0x000000ffffffffffULL;
     }
+
+    m_rcvDataBytes = value64 * m_linkWidth;
 
     mad_decode_field(pmaQueryBuf, IB_PC_EXT_XMT_PKTS_F, &value64);
     m_xmitPkts = value64;
