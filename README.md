@@ -1,12 +1,12 @@
-# IbPerfLib
+# IbPerfLib: A small library for reading the performance counters of all InfiniBand devices in a network
 
-A small library, which can be used to read the performance counters of all Infiniband devices in a network.
+[![Build Status](https://travis-ci.org/hhu-bsinfo/ibperf-lib.svg?branch=master)](https://travis-ci.org/hhu-bsinfo/ibperf-lib)
 
-This project uses the libibmad- and libibnetdisc-libraries to automatically discover all Infiniband devices in a
+This project uses the libibmad- and libibnetdisc-libraries to automatically discover all InfiniBand devices in a
 network and read their performance counters.  
-It can also operate in a compatibility mode in which IbPerfLib doesn't require root privileges by using the filesystem to read the performance counters. However, it will only detect local infiniband devices in this mode.
+It can also operate in a compatibility mode in which IbPerfLib doesn't require root privileges by using the filesystem to read the performance counters. However, it will only detect local infiniBand devices in this mode.
 
-It is also possible, to read the diagnostic performance counters of local infiniband devices.
+It is also possible, to read the diagnostic performance counters of local infiniBand devices.
 
 # Build instructions
 
@@ -45,8 +45,8 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -I/usr/include/infiniband)
 # Run instructions
 
 IbPerfLib comes with two small test programs called *IbPerfTest* and *IbDiagPerfTest*.  
-*IbPerfTest* scans your Infiniband network for devices and prints their counters to `stdout`.  
-*IbDiagPerfTest* prints the diagnostic counters of your local infiniband devices.
+*IbPerfTest* scans your InfiniBand network for devices and prints their counters to `stdout`.  
+*IbDiagPerfTest* prints the diagnostic counters of your local infiniBand devices.
 
 On a Debian-based system, you can run theses commands to build and run *IbPerfTest*:
 
