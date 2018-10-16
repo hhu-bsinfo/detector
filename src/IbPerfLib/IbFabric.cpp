@@ -36,7 +36,7 @@ IbFabric::IbFabric(bool compatibility) :
     }
 
     std::sort(m_nodes.begin(), m_nodes.end(),
-              [](auto &&l, auto &&r) { return l->GetDescription() < r->GetDescription(); });
+              [](IbNode *l, IbNode *r) { return l->GetDescription() < r->GetDescription(); });
 }
 
 void IbFabric::RefreshCounters() {
