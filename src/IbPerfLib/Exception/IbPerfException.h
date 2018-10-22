@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef PROJECT_IBPERFEXCEPTION_H
-#define PROJECT_IBPERFEXCEPTION_H
+#ifndef IBPERFLIB_IBPERFEXCEPTION_H
+#define IBPERFLIB_IBPERFEXCEPTION_H
 
 #include <exception>
 #include <string>

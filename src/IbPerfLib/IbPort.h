@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFMONITOR_IBPORTCOUNTER_H
-#define IBPERFMONITOR_IBPORTCOUNTER_H
+#ifndef IBPERFLIB_IBPORTCOUNTER_H
+#define IBPERFLIB_IBPORTCOUNTER_H
 
 // The extended 64-bit versions of rcvErrors, rcvRemotePhysicalErrors, rcvSwitchRelayErrors, xmitDiscards,
 // xmitConstraintErrors, rcvConstraintErrors, localLinkIntegrityErrors, excessiveBufferOverrunErrors, xmitWait

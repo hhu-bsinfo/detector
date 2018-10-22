@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef PROJECT_IBPORTCOMPAT_H
-#define PROJECT_IBPORTCOMPAT_H
+#ifndef IBPERFLIB_IBPORTCOMPAT_H
+#define IBPERFLIB_IBPORTCOMPAT_H
 
 #include <cstdint>
 #include <fstream>

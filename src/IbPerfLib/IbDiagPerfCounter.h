@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef PROJECT_IBDIAGPERFCOUNTER_H
-#define PROJECT_IBDIAGPERFCOUNTER_H
+#ifndef IBPERFLIB_IBDIAGPERFCOUNTER_H
+#define IBPERFLIB_IBDIAGPERFCOUNTER_H
 
 #include <cstdint>
 #include <fstream>

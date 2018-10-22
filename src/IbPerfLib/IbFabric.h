@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFMONITOR_IBFABRIC_H
-#define IBPERFMONITOR_IBFABRIC_H
+#ifndef IBPERFLIB_IBFABRIC_H
+#define IBPERFLIB_IBFABRIC_H
 
 #include "IbNode.h"
 

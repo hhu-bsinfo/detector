@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFMONITOR_IBNODE_H
-#define IBPERFMONITOR_IBNODE_H
+#ifndef IBPERFLIB_IBNODE_H
+#define IBPERFLIB_IBNODE_H
 
 #include <cstdint>
 #include <ibnetdisc.h>

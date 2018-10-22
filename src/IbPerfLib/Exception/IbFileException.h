@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef PROJECT_IBFILEEXCEPTION_H
-#define PROJECT_IBFILEEXCEPTION_H
+#ifndef IBPERFLIB_IBFILEEXCEPTION_H
+#define IBPERFLIB_IBFILEEXCEPTION_H
 
 #include <exception>
 #include <string>
