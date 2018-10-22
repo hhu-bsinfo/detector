@@ -26,6 +26,7 @@
 #include <IbPerfLib/IbDiagPerfCounter.h>
 #include <IbPerfLib/Exception/IbFileException.h>
 #include <vector>
+#include <IbPerfLib/Version.h>
 
 bool isRunning = true;
 
@@ -36,6 +37,8 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
+    printf("IbPerfLib %s - git %s\nBuild date: %s\n\n", IBPERF_LIB_VERSION, IBPERF_LIB_GIT_REV, IBPERF_LIB_BUILD_DATE);
+
     int32_t numDevices;
     std::vector<IbPerfLib::IbDiagPerfCounter *> counters;
 

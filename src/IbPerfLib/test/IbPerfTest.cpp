@@ -20,7 +20,8 @@
 #include <chrono>
 #include <thread>
 #include <IbPerfLib/Exception/IbMadException.h>
-#include "IbPerfLib/IbFabric.h"
+#include <IbPerfLib/IbFabric.h>
+#include <IbPerfLib/Version.h>
 
 bool isRunning = true;
 
@@ -31,6 +32,8 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
+    printf("IbPerfLib %s - git %s\nBuild date: %s\n\n", IBPERF_LIB_VERSION, IBPERF_LIB_GIT_REV, IBPERF_LIB_BUILD_DATE);
+
     if(argc < 2) {
         printf("Usage: ./IbPerfTest <mad/compat>\n");
         exit(EXIT_FAILURE);

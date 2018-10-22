@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef PROJECT_VERSION_H
-#define PROJECT_VERSION_H
+#ifndef IBPERFLIB_VERSION_H
+#define IBPERFLIB_VERSION_H
 
 #define XSTRINGIFY(a) STRINGIFY(a)
 #define STRINGIFY(a) #a
