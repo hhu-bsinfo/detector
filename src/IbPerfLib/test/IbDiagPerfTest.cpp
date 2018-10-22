@@ -37,8 +37,8 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
-    printf("IbPerfLib %s - git %s\nBuild date: %s\n\n", IbPerfLib::BuildConfig::VERSION,
-           IbPerfLib::BuildConfig::GIT_REV, IbPerfLib::BuildConfig::BUILD_DATE);
+    printf("IbPerfLib %s - git %s(%s)\nBuild date: %s\n\n", IbPerfLib::BuildConfig::VERSION,
+           IbPerfLib::BuildConfig::GIT_REV, IbPerfLib::BuildConfig::GIT_BRANCH, IbPerfLib::BuildConfig::BUILD_DATE);
 
     int32_t numDevices;
     std::vector<IbPerfLib::IbDiagPerfCounter *> counters;

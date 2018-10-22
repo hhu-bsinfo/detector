@@ -17,6 +17,12 @@ const char *BuildConfig::GIT_REV = XSTRINGIFY(IBPERFLIB_GIT_REV);
 const char *BuildConfig::GIT_REV = "unknown";
 #endif
 
+#ifdef IBPERFLIB_GIT_BRANCH
+const char *BuildConfig::GIT_BRANCH = XSTRINGIFY(IBPERFLIB_GIT_BRANCH);
+#else
+const char *BuildConfig::GIT_BRANCH = "unknown";
+#endif
+
 #ifdef IBPERFLIB_BUILD_DATE
 const char *BuildConfig::BUILD_DATE = XSTRINGIFY(IBPERFLIB_BUILD_DATE);
 #else

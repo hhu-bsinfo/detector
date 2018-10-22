@@ -33,6 +33,7 @@ public:
 
     static const char *VERSION;
     static const char *GIT_REV;
+    static const char *GIT_BRANCH;
     static const char *BUILD_DATE;
 
 };

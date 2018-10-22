@@ -32,6 +32,15 @@ if (IBPERFLIB_GIT_REV STREQUAL "")
     set(IBPERFLIB_GIT_REV "not available")
 endif ()
 
+# Set git branch
+execute_process(COMMAND git rev-parse --symbolic-full-name --abbrev-ref HEAD
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        OUTPUT_VARIABLE IBPERFLIB_GIT_BRANCH ERROR_QUIET)
+string(STRIP "${IBPERFLIB_GIT_BRANCH}" IBPERFLIB_GIT_BRANCH)
+if (IBPERFLIB_GIT_BRANCH STREQUAL "")
+    set(IBPERFLIB_GIT_REV "not available")
+endif ()
+
 # Set build date
 string(TIMESTAMP IBPERFLIB_BUILD_DATE "%Y-%m-%d %H:%M:%S")
 
@@ -41,7 +50,8 @@ execute_process(COMMAND bash -c "./check_addl_ext_counters_support.sh"
         OUTPUT_VARIABLE IBPERFLIB_USE_ADDITIONAL_EXTENDED_COUNTERS)
 
 # Print build information
-message("IbPerfLib ${IBPERFLIB_VERSION} - git ${IBPERFLIB_GIT_REV}, build date: ${IBPERFLIB_BUILD_DATE}")
+message("IbPerfLib ${IBPERFLIB_VERSION} - git ${IBPERFLIB_GIT_REV}(${IBPERFLIB_GIT_BRANCH}), \
+build date: ${IBPERFLIB_BUILD_DATE}")
 
 if (IBPERFLIB_USE_ADDITIONAL_EXTENDED_COUNTERS STREQUAL "1")
     message("Additional extended counters are supported!")
@@ -51,7 +61,8 @@ endif ()
 
 # Set preprocessor defines
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DIBPERFLIB_VERSION='${IBPERFLIB_VERSION}'\
-    -DIBPERFLIB_GIT_REV='${IBPERFLIB_GIT_REV}' -DIBPERFLIB_BUILD_DATE='${IBPERFLIB_BUILD_DATE}' \
+    -DIBPERFLIB_GIT_REV='${IBPERFLIB_GIT_REV}' -DIBPERFLIB_GIT_BRANCH='${IBPERFLIB_GIT_BRANCH}' \
+    -DIBPERFLIB_BUILD_DATE='${IBPERFLIB_BUILD_DATE}' \
     -DUSE_ADDITIONAL_EXTENDED_COUNTERS='${IBPERFLIB_USE_ADDITIONAL_EXTENDED_COUNTERS}'")
 
 # Set source directory variables
