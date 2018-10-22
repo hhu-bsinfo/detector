@@ -19,30 +19,24 @@
 #ifndef IBPERFLIB_VERSION_H
 #define IBPERFLIB_VERSION_H
 
-#define XSTRINGIFY(a) STRINGIFY(a)
-#define STRINGIFY(a) #a
+namespace IbPerfLib {
 
+/**
+ * Holds information about the build cofiguration and program version.
+ *
+ * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
+ * @date October 2018
+ */
+class BuildConfig {
 
-#ifdef IBPERFLIB_VERSION
-    static const char* IBPERF_LIB_VERSION = XSTRINGIFY(IBPERFLIB_VERSION);
-#else
-    static const char* IBPERF_LIB_VERSION = "v0.0.0";
-#endif
+public:
 
-#ifdef IBPERFLIB_GIT_REV
-    static const char* IBPERF_LIB_GIT_REV = XSTRINGIFY(IBPERFLIB_GIT_REV);
-#else
-    static const char* IBPERF_LIB_GIT_REV = "unknown";
-#endif
+    static const char *VERSION;
+    static const char *GIT_REV;
+    static const char *BUILD_DATE;
 
-#ifdef IBPERFLIB_BUILD_DATE
-    static const char* IBPERF_LIB_BUILD_DATE = XSTRINGIFY(IBPERFLIB_BUILD_DATE);
-#else
-    static const char* IBPERF_LIB_BUILD_DATE = "0000-00-00 00:00:00";
-#endif
+};
 
-
-#undef STRINGIFY
-#undef XSTRINGIFY
+}
 
 #endif

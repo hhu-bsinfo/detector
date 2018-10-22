@@ -20,6 +20,7 @@ message(STATUS "Project " ${PROJECT_NAME})
 include_directories(${IBPERFLIB_SRC_DIR})
  
 set(SOURCE_FILES
+        ${IBPERFLIB_SRC_DIR}/IbPerfLib/BuildConfig.cpp
         ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPerfCounter.cpp
         ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPort.cpp
         ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbNode.cpp
