@@ -90,6 +90,10 @@ public:
         return m_lid;
     }
 
+    uint8_t GetLinkWidth() {
+        return m_linkWidth;
+    }
+
     /**
      * Write port information to an output stream.
      */
