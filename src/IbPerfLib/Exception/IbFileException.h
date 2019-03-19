@@ -25,6 +25,12 @@
 
 namespace IbPerfLib {
 
+/**
+ * An exception, which signalises an error during a file-operation.
+ *
+ * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
+ * @date July 2018
+ */
 class IbFileException : public IbPerfException {
 
 public:

@@ -1,5 +1,3 @@
-#include <utility>
-
 /*
  * Copyright (C) 2018 Heinrich-Heine-Universitaet Duesseldorf,
  * Institute of Computer Science, Department Operating Systems
@@ -26,6 +24,12 @@
 
 namespace IbPerfLib {
 
+/**
+ * An exception, which signalises an error in IbPerfLib.
+ *
+ * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
+ * @date July 2018
+ */
 class IbPerfException : public std::exception {
 
 public:

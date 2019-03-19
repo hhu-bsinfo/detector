@@ -25,6 +25,12 @@
 
 namespace IbPerfLib {
 
+/**
+ * An exception, which signalises an error during an ibverbs-operation.
+ *
+ * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
+ * @date August 2018
+ */
 class IbVerbsException : public IbPerfException {
 
 public:

@@ -25,6 +25,12 @@
 
 namespace IbPerfLib {
 
+/**
+ * An exception, which signalises an error during an ibmad-operation.
+ *
+ * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
+ * @date July 2018
+ */
 class IbMadException : public IbPerfException {
 
 public:

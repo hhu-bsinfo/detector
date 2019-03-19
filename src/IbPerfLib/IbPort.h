@@ -77,6 +77,13 @@ public:
     void RefreshCounters() override;
 
     /**
+     * Get the port's local id.
+     */
+    uint16_t GetLid() {
+        return m_lid;
+    }
+
+    /**
      * Get the number, that the port has on its device.
      */
     uint8_t GetNum() {
@@ -84,12 +91,8 @@ public:
     }
 
     /**
-     * Get the port's local id.
+     * Get the port's link width.
      */
-    uint16_t GetLid() {
-        return m_lid;
-    }
-
     uint8_t GetLinkWidth() {
         return m_linkWidth;
     }
@@ -151,6 +154,9 @@ private:
      */
     ib_portid_t m_portId;
 
+    /**
+     * Indicates, whether this port is part of a NIC, a switch, or a router.
+     */
     MAD_NODE_TYPE m_nodeType;
 
     /**

@@ -25,6 +25,12 @@
 
 namespace IbPerfLib {
 
+/**
+ * An exception, which signalises an error during an ibnetdisc-operation.
+ *
+ * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
+ * @date March 2019
+ */
 class IbNetDiscException : public IbPerfException {
 
 public:
