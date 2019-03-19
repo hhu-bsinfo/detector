@@ -29,6 +29,8 @@ const char *BuildConfig::BUILD_DATE = XSTRINGIFY(IBPERFLIB_BUILD_DATE);
 const char *BuildConfig::BUILD_DATE = "0000-00-00 00:00:00";
 #endif
 
+const bool BuildConfig::ADDITIONAL_EXTENDED_COUNTERS_ENABLED = USE_ADDITIONAL_EXTENDED_COUNTERS == 1;
+
 }
 
 #undef STRINGIFY

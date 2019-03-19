@@ -35,6 +35,7 @@ public:
     static const char *GIT_REV;
     static const char *GIT_BRANCH;
     static const char *BUILD_DATE;
+    static const bool ADDITIONAL_EXTENDED_COUNTERS_ENABLED;
 
 };
 

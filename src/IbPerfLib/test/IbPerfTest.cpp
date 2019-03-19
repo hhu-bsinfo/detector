@@ -32,8 +32,10 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
-    printf("IbPerfLib %s - git %s(%s)\nBuild date: %s\n\n", IbPerfLib::BuildConfig::VERSION,
-            IbPerfLib::BuildConfig::GIT_REV, IbPerfLib::BuildConfig::GIT_BRANCH, IbPerfLib::BuildConfig::BUILD_DATE);
+    printf("IbPerfLib %s - git %s(%s)\nBuild date: %s\nAdditional extended counters: %s\n\n",
+            IbPerfLib::BuildConfig::VERSION, IbPerfLib::BuildConfig::GIT_REV, IbPerfLib::BuildConfig::GIT_BRANCH,
+            IbPerfLib::BuildConfig::BUILD_DATE, IbPerfLib::BuildConfig::ADDITIONAL_EXTENDED_COUNTERS_ENABLED ?
+            "Enabled" : "Disabled");
 
     if(argc < 2) {
         printf("Usage: ./IbPerfTest <mad/compat>\n");
@@ -49,12 +51,6 @@ int main(int argc, char *argv[]) {
     } else {
         printf("Usage: ./IbPerfTest <mad/compat>\n");
         exit(EXIT_FAILURE);
-    }
-
-    if(USE_ADDITIONAL_EXTENDED_COUNTERS) {
-        printf("Additional extended counters are supported!\n\n");
-    } else {
-        printf("Additional extended counters are not supported!\n\n");
     }
 
     IbPerfLib::IbFabric fabric(compat);
