@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
             fabric.RefreshCounters();
             std::cout << fabric;
         } catch(const IbPerfLib::IbPerfException &exception) {
-            printf("An exception occured: %s", exception.what());
+            printf("An exception occurred: %s", exception.what());
         }
 
         std::this_thread::sleep_for(std::chrono::seconds(5));

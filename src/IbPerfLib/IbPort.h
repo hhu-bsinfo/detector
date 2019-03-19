@@ -103,8 +103,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const IbPort &o) {
         return os
                 << "Port Number: " << unsigned(o.m_portNum) << ", "
-                << "LID: " << o.m_lid << ", "
-                << "Link width: " << unsigned(o.m_linkWidth) << "x, "
+                << "LID: " << std::hex << o.m_lid << ", "
+                << "Link width: " << std::dec << unsigned(o.m_linkWidth) << "x, "
                 << "XmitBytes: " << o.GetXmitDataBytes() << " Bytes, "
                 << "RcvBytes: " << o.GetRcvDataBytes() << " Bytes" << std::endl;
     }
