@@ -20,7 +20,7 @@ message(STATUS "Project " ${PROJECT_NAME})
 include_directories(${IBPERFLIB_SRC_DIR})
  
 set(SOURCE_FILES
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/test/IbDiagPerfTest.cpp ../../src/IbPerfLib/BuildConfig.cpp)
+        ${IBPERFLIB_SRC_DIR}/IbPerfLib/test/IbDiagPerfTest.cpp ../../src/IbPerfLib/BuildConfig.cpp ../../src/IbPerfLib/Exception/IbNetDiscException.h)
  
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

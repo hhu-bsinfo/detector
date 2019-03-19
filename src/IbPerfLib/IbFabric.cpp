@@ -19,6 +19,7 @@
 #include <algorithm>
 #include "IbFabric.h"
 #include "IbPerfLib/Exception/IbMadException.h"
+#include "IbPerfLib/Exception/IbNetDiscException.h"
 #include "IbPerfLib/Exception/IbFileException.h"
 #include "IbPerfLib/Exception/IbVerbsException.h"
 #include "IbDiagPerfCounter.h"
@@ -79,7 +80,7 @@ void IbFabric::discoverFabric() {
     m_fabric = ibnd_discover_fabric(nullptr, 0, nullptr, &config);
 
     if (m_fabric == nullptr) {
-        throw IbMadException("Unable to discover nodes in the fabric (ibnd_discover_fabric failed)!");
+        throw IbNetDiscException("Unable to discover nodes in the fabric (ibnd_discover_fabric failed)!");
     }
 
     // The found nodes are stored in a linked list, where every node has a pointer to the next one.
@@ -98,7 +99,7 @@ void IbFabric::discoverLocalDevices() {
     ibv_device **deviceList = ibv_get_device_list(&numDevices);
 
     if(deviceList == nullptr) {
-        throw IbFileException("Unable to get device list! Error: " + std::string(strerror(errno)));
+        throw IbVerbsException("Unable to get device list! Error: " + std::string(strerror(errno)));
     }
 
     for(int32_t i = 0; i < numDevices; i++) {
