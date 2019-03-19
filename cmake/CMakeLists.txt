@@ -38,7 +38,7 @@ execute_process(COMMAND git rev-parse --symbolic-full-name --abbrev-ref HEAD
         OUTPUT_VARIABLE IBPERFLIB_GIT_BRANCH ERROR_QUIET)
 string(STRIP "${IBPERFLIB_GIT_BRANCH}" IBPERFLIB_GIT_BRANCH)
 if (IBPERFLIB_GIT_BRANCH STREQUAL "")
-    set(IBPERFLIB_GIT_REV "not available")
+    set(IBPERFLIB_GIT_BRANCH "master")
 endif ()
 
 # Set build date
@@ -54,9 +54,9 @@ message("IbPerfLib ${IBPERFLIB_VERSION} - git ${IBPERFLIB_GIT_REV}(${IBPERFLIB_G
 build date: ${IBPERFLIB_BUILD_DATE}")
 
 if (IBPERFLIB_USE_ADDITIONAL_EXTENDED_COUNTERS STREQUAL "1")
-    message("Additional extended counters are supported!")
+    message(STATUS "Additional extended counters are supported!")
 else ()
-    message("Additional extended counters are not supported!")
+    message(STATUS "Additional extended counters are not supported!")
 endif ()
 
 # Set preprocessor defines
