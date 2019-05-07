@@ -229,6 +229,7 @@ public:
                 << "SqLocalLengthErrors: " << o.m_sqLocalLengthErrors << std::endl
                 << "SqLocalProtectionErrors: " << o.m_sqLocalProtectionErrors << std::endl
                 << "SqLocalQpProtectionErrors: " << o.m_sqLocalQpProtectionErrors << std::endl
+                << "SqMemoryWindowBindErrors: " << o.m_sqMemoryWindowBindErrors << std::endl
                 << "SqOutOfSequenceErrors: " << o.m_sqOutOfSequenceErrors << std::endl
                 << "SqRemoteAccessErrors: " << o.m_sqRemoteAccessErrors << std::endl
                 << "SqRemoteInvalidRequestErrors: " << o.m_sqRemoteInvalidRequestErrors << std::endl
