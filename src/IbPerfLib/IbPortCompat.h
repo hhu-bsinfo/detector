@@ -28,7 +28,7 @@ namespace IbPerfLib {
 /**
  * Implementation of IbPort, which does not use the ibmad-library to read the performance counters,
  * but instead reads the from the filesystem. This does not require root privileges,
- * but only works for local infiniband devices.
+ * but only works for local InfiniBand devices.
  */
 class IbPortCompat : public IbPort {
 

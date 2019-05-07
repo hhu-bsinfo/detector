@@ -28,7 +28,7 @@
 namespace IbPerfLib {
 
 /**
- * Represents a node in an Infiniband-fabric (e.g. a Switch or an HCA).
+ * Represents a node in an InfiniBand-fabric (e.g. a Switch or an HCA).
  * The performance counters are aggregated over all of the node's ports.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
@@ -48,8 +48,10 @@ public:
      * Compatability constructor.
      *
      * Uses IbPortCompat instead of IbPort.
+     *
+     * @param context The device context to use for this node.
      */
-    IbNode(std::string name, ibv_context *context);
+    explicit IbNode(ibv_device *context);
 
     /**
      * Destructor.

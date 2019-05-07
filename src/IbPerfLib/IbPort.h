@@ -44,7 +44,7 @@
 namespace IbPerfLib {
 
 /**
- * Uses the MAD-library to read performance counters from an Infiniband-port.
+ * Uses the MAD-library to read performance counters from an InfiniBand-port.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
  * @date May 2018
@@ -145,12 +145,12 @@ protected:
 private:
     /**
      * Pointer to a mad-port. A port can be opened by calling mad_rpc_open_port().
-     * A port must be opened before it is possible to query any data from the Infiniband device.
+     * A port must be opened before it is possible to query any data from the InfiniBand device.
      */
     ibmad_port *m_madPort;
 
     /**
-     * Contains information about an Infiniband device/port. This struct can be initialized by calling ib_portid_set().
+     * Contains information about an InfiniBand device/port. This struct can be initialized by calling ib_portid_set().
      */
     ib_portid_t m_portId;
 
@@ -160,17 +160,17 @@ private:
     MAD_NODE_TYPE m_nodeType;
 
     /**
-     * Indicates, whether or not the Infiniband device supports the extended counters for Uni- and Multicast-operations.
+     * Indicates, whether or not the InfiniBand device supports the extended counters for Uni- and Multicast-operations.
      */
     bool m_isExtendedWidthSupported;
 
     /**
-     * Indicates, whether or not the Infiniband device supports the extended error counters.
+     * Indicates, whether or not the InfiniBand device supports the extended error counters.
      */
     bool m_isAdditionalExtendedPortCountersSupported;
 
     /**
-     * Indicates, whether or not the Infiniband device supports the transmission-wait counter.
+     * Indicates, whether or not the InfiniBand device supports the transmission-wait counter.
      */
     bool m_isXmitWaitSupported;
 };

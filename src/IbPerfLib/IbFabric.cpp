@@ -27,8 +27,7 @@
 namespace IbPerfLib {
 
 IbFabric::IbFabric(bool compatibility) :
-        m_fabric(nullptr),
-        m_numNodes(0) {
+        m_fabric(nullptr) {
 
     if(compatibility) {
         discoverLocalDevices();
@@ -67,7 +66,7 @@ void IbFabric::discoverFabric() {
     // We don't need any special parameters and just set them all to zero.
     ibnd_config_t config = {0};
 
-    // ibnd_discover_fabric() scans the entire Infiniband-fabric for nodes.
+    // ibnd_discover_fabric() scans the entire InfiniBand-fabric for nodes.
     // It takes the following parameters:
     //
     // dev_name: The name of the local device, from which the discovery is started.
@@ -88,7 +87,6 @@ void IbFabric::discoverFabric() {
 
     // Iterate over all nodes and create an instance of IbPort for each one.
     do {
-        m_numNodes++;
         m_nodes.emplace_back(new IbNode(currentNode));
         currentNode = currentNode->next;
     } while (currentNode != nullptr);
@@ -103,26 +101,15 @@ void IbFabric::discoverLocalDevices() {
     }
 
     for(int32_t i = 0; i < numDevices; i++) {
-        const char *deviceName = ibv_get_device_name(deviceList[i]);
-        ibv_context *deviceContext = ibv_open_device(deviceList[i]);
+        IbNode *currentNode = nullptr;
 
-        if(deviceContext == nullptr) {
-            throw IbVerbsException("Unable to open device context!");
+        try {
+            currentNode = new IbNode(deviceList[i]);
+        } catch(const IbVerbsException &exception) {
+            continue;
         }
 
-        ibv_device_attr attributes{};
-        int ret = ibv_query_device(deviceContext, &attributes);
-
-        if(ret != 0) {
-            throw IbVerbsException("Unable to query device attributes from '" + std::string(deviceName) +
-                "'! Error: " + std::string(strerror(ret)));
-        }
-
-        m_nodes.emplace_back(new IbPerfLib::IbNode(deviceName, deviceContext));
-
-        ibv_close_device(deviceContext);
-
-        m_numNodes++;
+        m_nodes.emplace_back(currentNode);
     }
 
     ibv_free_device_list(deviceList);

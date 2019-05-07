@@ -24,7 +24,7 @@
 namespace IbPerfLib {
 
 /**
- * Represents an entire Infiniband-fabric.
+ * Represents an entire InfiniBand-fabric.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de, 05.05.2018
  */
@@ -37,7 +37,7 @@ public:
      * Set to compatibility to true, to activate compatibility mode.
      * In this mode, IbPerfLib will use the filesystem to query performance counters instead of the ibmad-library.
      * In contrary to the ibmad-library, this mode does not require root privileges,
-     * but it will only detect local infiniband devices.
+     * but it will only detect local InfiniBand devices.
      *
      * @param compatibility Set to true, to activate compatibility mode.
      */
@@ -62,7 +62,7 @@ public:
      * Get the amount of nodes in the fabric.
      */
     uint32_t GetNumNodes() const {
-        return m_numNodes;
+        return m_nodes.size();
     }
 
     /**
@@ -76,7 +76,8 @@ public:
      * Write fabric information to an output stream.
      */
     friend std::ostream &operator<<(std::ostream &os, const IbFabric &o) {
-        os << "Discovered " << o.m_numNodes << (o.m_numNodes == 1 ? " node" : " nodes") << " in the fabric:" << std::endl;
+        os << "Discovered " << o.m_nodes.size() << (o.m_nodes.size() == 1 ? " node" : " nodes")
+            << " in the fabric:" << std::endl;
 
         for (const auto &node : o.m_nodes) {
             os << *node << std::endl;
@@ -97,11 +98,6 @@ private:
      * The ibnetdisc-library can be used to fill it with information about the fabric.
      */
     ibnd_fabric_t *m_fabric;
-
-    /**
-     * The amount of nodes in the fabric.
-     */
-    uint32_t m_numNodes;
 
     /**
      * All of the nodes in the fabric.

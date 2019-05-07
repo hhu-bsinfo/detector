@@ -1,4 +1,3 @@
-#include <utility>
 #include <IbPerfLib/Exception/IbVerbsException.h>
 
 /*
@@ -24,20 +23,27 @@
 
 namespace IbPerfLib {
 
-IbNode::IbNode(std::string name, ibv_context *context) : IbPerfCounter(),
-                                                         m_desc(std::move(name)),
-                                                         m_guid(0),
-                                                         m_numPorts(0) {
-    ibv_device_attr deviceAttributes{};
-    int ret = ibv_query_device(context, &deviceAttributes);
+IbNode::IbNode(ibv_device *device) : IbPerfCounter(),
+                                      m_guid(0),
+                                      m_numPorts(0) {
+    m_desc = ibv_get_device_name(device);
 
-    if(ret != 0) {
-        throw IbVerbsException("Unable to query device attributes of '" + name +
-                               "'! Error: " + std::string(strerror(ret)));
+    ibv_context *context = ibv_open_device(device);
+
+    if (context == nullptr) {
+        throw IbVerbsException("Unable to open context for device '" + m_desc + "'! Error: "+ strerror(errno));
     }
 
-    m_guid = htonll(deviceAttributes.node_guid);
-    m_numPorts = deviceAttributes.phys_port_cnt;
+    ibv_device_attr attr{};
+
+    int ret = ibv_query_device(context, &attr);
+
+    if(ret != 0) {
+        throw IbVerbsException("Unable to query device attributes from '" + m_desc + "'! Error: " + strerror(ret));
+    }
+
+    m_guid = htonll(attr.node_guid);
+    m_numPorts = attr.phys_port_cnt;
 
     // Iterate over all of the node's ports and create an instance of IbPortCompat for each one.
     for (uint8_t i = 0; i < m_numPorts; i++) {
@@ -45,12 +51,14 @@ IbNode::IbNode(std::string name, ibv_context *context) : IbPerfCounter(),
         ret = ibv_query_port(context, static_cast<uint8_t>(i + 1), &portAttributes);
 
         if(ret != 0) {
-            throw IbVerbsException("Unable to query port attributes of '" + name +
+            throw IbVerbsException("Unable to query port attributes of '" + m_desc +
                                     + ", port " + std::to_string(i) + "'! Error: " + std::string(strerror(ret)));
         }
 
         m_ports.push_back(new IbPortCompat(m_desc, portAttributes, static_cast<uint8_t>(i + 1)));
     }
+
+    ibv_close_device(context);
 }
 
 IbNode::IbNode(ibnd_node_t *node) : IbPerfCounter(),

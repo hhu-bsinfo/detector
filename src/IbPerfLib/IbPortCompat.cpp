@@ -24,9 +24,8 @@
 namespace IbPerfLib {
 
 IbPortCompat::IbPortCompat(std::string deviceName, ibv_port_attr attributes, uint8_t portNum) :
-        IbPort(attributes, 0),
-        m_deviceName(std::move(deviceName)),
-        m_portNum(portNum) {
+        IbPort(attributes, portNum),
+        m_deviceName(std::move(deviceName)) {
     std::string path = "/sys/class/infiniband/" + m_deviceName + "/ports/" + std::to_string(m_portNum) + "/counters/";
 
     files[0] = std::ifstream(path + "port_xmit_data", std::ios::in);
@@ -53,7 +52,7 @@ IbPortCompat::IbPortCompat(std::string deviceName, ibv_port_attr attributes, uin
 
     for (const std::ifstream &file : files) {
         if (!file.is_open()) {
-            throw IbFileException("Unable to open file!");
+            throw IbFileException("Unable to open file in '" + path + "'!");
         }
     }
 
