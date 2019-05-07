@@ -56,6 +56,21 @@ public:
     void RefreshCounters();
 
     /**
+     * Get the name of the device, that this counter belongs to.
+     */
+    std::string GetDeviceName() {
+        return m_deviceName;
+    }
+
+    /**
+     * Get the number of the port, that this counter is monitoring.
+     * A port number of 0 means, that the whole device is being monitored.
+     */
+    uint8_t GetPortNumber() {
+        return m_portNumber;
+    }
+
+    /**
      * Get the lifespan counter.
      */
     uint64_t GetLifespan() const {
