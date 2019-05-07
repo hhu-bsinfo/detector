@@ -67,12 +67,11 @@ private:
 private:
 
     std::string m_deviceName;
-    uint8_t m_portNum;
 
-    char buffer[128];
+    char buffer[128]{};
 
-    std::ifstream files[21];
-    uint64_t baseValues[21];
+    std::ifstream files[21]{};
+    uint64_t baseValues[21]{};
 
 };
 
