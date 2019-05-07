@@ -106,7 +106,7 @@ public:
                 << "LID: " << std::hex << o.m_lid << ", "
                 << "Link width: " << std::dec << unsigned(o.m_linkWidth) << "x, "
                 << "XmitBytes: " << o.GetXmitDataBytes() << " Bytes, "
-                << "RcvBytes: " << o.GetRcvDataBytes() << " Bytes" << std::endl;
+                << "RcvBytes: " << o.GetRcvDataBytes() << " Bytes";
     }
 
 private:

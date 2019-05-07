@@ -110,8 +110,12 @@ public:
            << "GUID: 0x" << std::hex << o.m_guid << ", "
            << "Ports: " << std::dec << unsigned(o.m_numPorts) << std::endl;
 
-        for (const auto &port : o.m_ports) {
-            os << "    " << *port;
+        for (uint32_t i = 0; i < o.m_ports.size(); i++) {
+            os << "    " << *(o.m_ports[i]);
+
+            if(i < o.m_ports.size() - 1) {
+                os << std::endl;
+            }
         }
 
         return os;

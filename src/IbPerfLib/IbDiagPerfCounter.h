@@ -230,29 +230,29 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const IbDiagPerfCounter &o) {
         return os
                 << "Device: " << o.m_deviceName
-                << (o.m_portNumber > 0 ? ", Port: "  + std::to_string(o.m_portNumber) : "") << std::endl << std::endl
-                << "Lifespan: " << o.m_lifespan << std::endl << std::endl
-                << "RqLocalLengthErrors: " << o.m_rqLocalLengthErrors << std::endl
-                << "RqLocalProtectionErrors: " << o.m_rqLocalProtectionErrors << std::endl
-                << "RqLocalQpProtectionErrors: " << o.m_rqLocalQpProtectionErrors << std::endl
-                << "RqOutOfSequenceErrors: " << o.m_rqOutOfSequenceErrors << std::endl
-                << "RqRemoteAccessErrors: " << o.m_rqRemoteAccessErrors << std::endl
-                << "RqRemoteInvalidRequestErrors: " << o.m_rqRemoteInvalidRequestErrors << std::endl
-                << "RqRnrNakNum: " << o.m_rqRnrNakNum << std::endl
-                << "RqCompletionQueueEntryErrors: " << o.m_rqCompletionQueueEntryErrors << std::endl << std::endl
-                << "SqBadResponseErrors: " << o.m_sqBadResponseErrors << std::endl
-                << "SqLocalLengthErrors: " << o.m_sqLocalLengthErrors << std::endl
-                << "SqLocalProtectionErrors: " << o.m_sqLocalProtectionErrors << std::endl
-                << "SqLocalQpProtectionErrors: " << o.m_sqLocalQpProtectionErrors << std::endl
-                << "SqMemoryWindowBindErrors: " << o.m_sqMemoryWindowBindErrors << std::endl
-                << "SqOutOfSequenceErrors: " << o.m_sqOutOfSequenceErrors << std::endl
-                << "SqRemoteAccessErrors: " << o.m_sqRemoteAccessErrors << std::endl
-                << "SqRemoteInvalidRequestErrors: " << o.m_sqRemoteInvalidRequestErrors << std::endl
-                << "SqRnrNakNum: " << o.m_sqRnrNakNum << std::endl
-                << "SqRemoteOperationErrors: " << o.m_sqRemoteOperationErrors << std::endl
-                << "SqRnrNakRetriesExceededErrors: " << o.m_sqRnrNakRetriesExceededErrors << std::endl
-                << "SqTransportRetriesExceededErrors: " << o.m_sqTransportRetriesExceededErrors << std::endl
-                << "SqCompletionQueueEntryErrors: " << o.m_sqCompletionQueueEntryErrors;
+                << (o.m_portNumber > 0 ? ", Port: "  + std::to_string(o.m_portNumber) : "") << std::endl
+                << "    Lifespan: " << o.m_lifespan << std::endl
+                << "    RqLocalLengthErrors: " << o.m_rqLocalLengthErrors << std::endl
+                << "    RqLocalProtectionErrors: " << o.m_rqLocalProtectionErrors << std::endl
+                << "    RqLocalQpProtectionErrors: " << o.m_rqLocalQpProtectionErrors << std::endl
+                << "    RqOutOfSequenceErrors: " << o.m_rqOutOfSequenceErrors << std::endl
+                << "    RqRemoteAccessErrors: " << o.m_rqRemoteAccessErrors << std::endl
+                << "    RqRemoteInvalidRequestErrors: " << o.m_rqRemoteInvalidRequestErrors << std::endl
+                << "    RqRnrNakNum: " << o.m_rqRnrNakNum << std::endl
+                << "    RqCompletionQueueEntryErrors: " << o.m_rqCompletionQueueEntryErrors << std::endl
+                << "    SqBadResponseErrors: " << o.m_sqBadResponseErrors << std::endl
+                << "    SqLocalLengthErrors: " << o.m_sqLocalLengthErrors << std::endl
+                << "    SqLocalProtectionErrors: " << o.m_sqLocalProtectionErrors << std::endl
+                << "    SqLocalQpProtectionErrors: " << o.m_sqLocalQpProtectionErrors << std::endl
+                << "    SqMemoryWindowBindErrors: " << o.m_sqMemoryWindowBindErrors << std::endl
+                << "    SqOutOfSequenceErrors: " << o.m_sqOutOfSequenceErrors << std::endl
+                << "    SqRemoteAccessErrors: " << o.m_sqRemoteAccessErrors << std::endl
+                << "    SqRemoteInvalidRequestErrors: " << o.m_sqRemoteInvalidRequestErrors << std::endl
+                << "    SqRnrNakNum: " << o.m_sqRnrNakNum << std::endl
+                << "    SqRemoteOperationErrors: " << o.m_sqRemoteOperationErrors << std::endl
+                << "    SqRnrNakRetriesExceededErrors: " << o.m_sqRnrNakRetriesExceededErrors << std::endl
+                << "    SqTransportRetriesExceededErrors: " << o.m_sqTransportRetriesExceededErrors << std::endl
+                << "    SqCompletionQueueEntryErrors: " << o.m_sqCompletionQueueEntryErrors;
     }
 
 

@@ -88,6 +88,9 @@ int main(int argc, char *argv[]) {
                 diagCounter->RefreshCounters();
                 std::cout << *diagCounter << std::endl << std::endl;
             }
+
+            std::cout << std::endl;
+
         } catch (const IbPerfLib::IbFileException &exception) {
             printf("An exception occurred: %s\n", exception.what());
         }

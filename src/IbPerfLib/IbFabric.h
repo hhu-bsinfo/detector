@@ -79,8 +79,12 @@ public:
         os << "Discovered " << o.m_nodes.size() << (o.m_nodes.size() == 1 ? " node" : " nodes")
             << " in the fabric:" << std::endl;
 
-        for (const auto &node : o.m_nodes) {
-            os << *node << std::endl;
+        for (uint32_t i = 0; i < o.m_nodes.size(); i++) {
+            os << *(o.m_nodes[i]);
+
+            if(i < o.m_nodes.size() - 1) {
+                os << std::endl;
+            }
         }
 
         return os;

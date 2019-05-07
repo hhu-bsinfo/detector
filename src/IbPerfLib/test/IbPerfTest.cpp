@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     while(isRunning) {
         try {
             fabric.RefreshCounters();
-            std::cout << fabric;
+            std::cout << fabric << std::endl << std::endl;
         } catch(const IbPerfLib::IbPerfException &exception) {
             printf("An exception occurred: %s", exception.what());
         }
