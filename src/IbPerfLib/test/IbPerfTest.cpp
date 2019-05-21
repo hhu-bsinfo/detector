@@ -37,23 +37,33 @@ int main(int argc, char *argv[]) {
             IbPerfLib::BuildConfig::BUILD_DATE, IbPerfLib::BuildConfig::ADDITIONAL_EXTENDED_COUNTERS_ENABLED ?
             "Enabled" : "Disabled");
 
-    if(argc < 2) {
-        printf("Usage: ./IbPerfTest <mad/compat>\n");
+    if(argc < 3) {
+        printf("Usage: ./IbPerfTest <network/local> <mad/compat>\n");
         exit(EXIT_FAILURE);
     }
 
+    bool network;
     bool compat;
 
-    if(!strcmp(argv[1], "mad")) {
-        compat = false;
-    } else if(!strcmp(argv[1], "compat")) {
-        compat = true;
+    if(!strcmp(argv[1], "network")) {
+        network = true;
+    } else if(!strcmp(argv[1], "local")) {
+        network = false;
     } else {
-        printf("Usage: ./IbPerfTest <mad/compat>\n");
+        printf("Usage: ./IbPerfTest <network/local> <mad/compat>\n");
         exit(EXIT_FAILURE);
     }
 
-    IbPerfLib::IbFabric fabric(compat);
+    if(!strcmp(argv[2], "mad")) {
+        compat = false;
+    } else if(!strcmp(argv[2], "compat")) {
+        compat = true;
+    } else {
+        printf("Usage: ./IbPerfTest <network/local> <mad/compat>\n");
+        exit(EXIT_FAILURE);
+    }
+
+    IbPerfLib::IbFabric fabric(network, compat);
 
     signal(SIGINT, SignalHandler);
 

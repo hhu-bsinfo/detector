@@ -26,17 +26,23 @@
 
 namespace IbPerfLib {
 
-IbFabric::IbFabric(bool compatibility) :
+IbFabric::IbFabric(bool network, bool compatibility) :
         m_fabric(nullptr) {
 
-    if(compatibility) {
-        discoverLocalDevices();
-    } else {
-        discoverFabric();
-    }
+    discoverFabric(network, compatibility);
 
     std::sort(m_nodes.begin(), m_nodes.end(),
               [](IbNode *l, IbNode *r) { return l->GetDescription() < r->GetDescription(); });
+}
+
+IbFabric::~IbFabric() {
+    for (IbNode *node : m_nodes) {
+        delete node;
+    }
+
+    if(m_fabric != nullptr) {
+        ibnd_destroy_fabric(m_fabric);
+    }
 }
 
 void IbFabric::RefreshCounters() {
@@ -51,17 +57,19 @@ void IbFabric::ResetCounters() {
     }
 }
 
-IbFabric::~IbFabric() {
-    for (IbNode *node : m_nodes) {
-        delete node;
-    }
-
-    if(m_fabric != nullptr) {
-        ibnd_destroy_fabric(m_fabric);
+void IbFabric::discoverFabric(bool network, bool compatibility) {
+    if(compatibility) {
+        discoverLocalDevices(true);
+    } else {
+        if(network) {
+            discoverNetwork();
+        } else {
+            discoverLocalDevices(false);
+        }
     }
 }
 
-void IbFabric::discoverFabric() {
+void IbFabric::discoverNetwork() {
     // The config contains parameters for ibnd_discover_fabric.
     // We don't need any special parameters and just set them all to zero.
     ibnd_config_t config = {0};
@@ -92,7 +100,7 @@ void IbFabric::discoverFabric() {
     } while (currentNode != nullptr);
 }
 
-void IbFabric::discoverLocalDevices() {
+void IbFabric::discoverLocalDevices(bool compatibility) {
     int32_t numDevices;
     ibv_device **deviceList = ibv_get_device_list(&numDevices);
 
@@ -104,7 +112,7 @@ void IbFabric::discoverLocalDevices() {
         IbNode *currentNode = nullptr;
 
         try {
-            currentNode = new IbNode(deviceList[i]);
+            currentNode = new IbNode(deviceList[i], compatibility);
         } catch(const IbVerbsException &exception) {
             continue;
         }

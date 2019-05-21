@@ -45,13 +45,15 @@ public:
     explicit IbNode(ibnd_node_t *node);
 
     /**
-     * Compatability constructor.
+     * Compatibility constructor.
      *
-     * Uses IbPortCompat instead of IbPort.
+     * Initializes an instance of IbNode with information from an ibverbs-context instead of an ibnd_node-struct.
+     * Uses IbPortCompat instead of IbPort, when compat is set to true.
      *
-     * @param context The device context to use for this node.
+     * @param device The device context to use for this node.
+     * @param compatibility Whether to use IbPortCompat or IbPort
      */
-    explicit IbNode(ibv_device *context);
+    explicit IbNode(ibv_device *device, bool compatibility);
 
     /**
      * Destructor.

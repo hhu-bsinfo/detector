@@ -23,14 +23,14 @@
 
 namespace IbPerfLib {
 
-IbNode::IbNode(ibv_device *device) : IbPerfCounter(),
-                                      m_guid(0),
-                                      m_numPorts(0) {
+IbNode::IbNode(ibv_device *device, bool compat) : IbPerfCounter(),
+                                                   m_guid(0),
+                                                   m_numPorts(0) {
     m_desc = ibv_get_device_name(device);
 
     ibv_context *context = ibv_open_device(device);
 
-    if (context == nullptr) {
+    if (device == nullptr) {
         throw IbVerbsException("Unable to open context for device '" + m_desc + "'! Error: "+ strerror(errno));
     }
 
@@ -55,7 +55,15 @@ IbNode::IbNode(ibv_device *device) : IbPerfCounter(),
                                     + ", port " + std::to_string(i) + "'! Error: " + std::string(strerror(ret)));
         }
 
-        m_ports.push_back(new IbPortCompat(m_desc, portAttributes, static_cast<uint8_t>(i + 1)));
+        IbPort *port;
+
+        if(compat) {
+            port = new IbPortCompat(m_desc, portAttributes, static_cast<uint8_t>(i + 1));
+        } else {
+            port = new IbPort(portAttributes.lid, static_cast<uint8_t>(i + 1));
+        }
+
+        m_ports.push_back(port);
     }
 
     ibv_close_device(context);

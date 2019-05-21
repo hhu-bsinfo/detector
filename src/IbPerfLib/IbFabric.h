@@ -34,14 +34,17 @@ public:
     /**
      * Constructor.
      *
+     * Scans either the local machine or the entire network for InfiniBand devices.
+     *
      * Set to compatibility to true, to activate compatibility mode.
      * In this mode, IbPerfLib will use the filesystem to query performance counters instead of the ibmad-library.
      * In contrary to the ibmad-library, this mode does not require root privileges,
-     * but it will only detect local InfiniBand devices.
+     * but it will only detect local InfiniBand devices, even if you set network to true.
      *
+     * @param network Set to true, to scan the entire network
      * @param compatibility Set to true, to activate compatibility mode.
      */
-    explicit IbFabric(bool compatibility = true);
+    explicit IbFabric(bool network, bool compatibility);
 
     /**
      * Destructor.
@@ -92,9 +95,11 @@ public:
 
 private:
 
-    void discoverFabric();
+    void discoverFabric(bool network, bool compatibility);
 
-    void discoverLocalDevices();
+    void discoverNetwork();
+
+    void discoverLocalDevices(bool compatibility);
 
 private:
     /**
