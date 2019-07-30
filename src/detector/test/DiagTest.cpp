@@ -23,9 +23,9 @@
 #include <chrono>
 #include <thread>
 #include <verbs.h>
-#include <IbPerfLib/BuildConfig.h>
-#include <IbPerfLib/IbDiagPerfCounter.h>
-#include <IbPerfLib/Exception/IbFileException.h>
+#include <detector/BuildConfig.h>
+#include <detector/IbDiagPerfCounter.h>
+#include <detector/exception/IbFileException.h>
 #include <vector>
 
 bool isRunning = true;
@@ -37,13 +37,10 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
-    printf("IbPerfLib %s - git %s(%s)\nBuild date: %s\nAdditional extended counters: %s\n\n",
-           IbPerfLib::BuildConfig::VERSION, IbPerfLib::BuildConfig::GIT_REV, IbPerfLib::BuildConfig::GIT_BRANCH,
-           IbPerfLib::BuildConfig::BUILD_DATE, IbPerfLib::BuildConfig::ADDITIONAL_EXTENDED_COUNTERS_ENABLED ?
-           "Enabled" : "Disabled");
+    Detector::BuildConfig::printBanner();
 
     int32_t numDevices;
-    std::vector<IbPerfLib::IbDiagPerfCounter *> counters;
+    std::vector<Detector::IbDiagPerfCounter *> counters;
 
     ibv_device **deviceList = ibv_get_device_list(&numDevices);
 
@@ -69,10 +66,10 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
 
-        counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(deviceName, 0));
+        counters.emplace_back(new Detector::IbDiagPerfCounter(deviceName, 0));
 
         for(uint8_t j = 1; j < deviceAttributes.phys_port_cnt + 1; j++) {
-            counters.emplace_back(new IbPerfLib::IbDiagPerfCounter(deviceName, j));
+            counters.emplace_back(new Detector::IbDiagPerfCounter(deviceName, j));
         }
 
         ibv_close_device(deviceContext);
@@ -91,7 +88,7 @@ int main(int argc, char *argv[]) {
 
             std::cout << std::endl;
 
-        } catch (const IbPerfLib::IbFileException &exception) {
+        } catch (const Detector::IbFileException &exception) {
             printf("An exception occurred: %s\n", exception.what());
         }
 

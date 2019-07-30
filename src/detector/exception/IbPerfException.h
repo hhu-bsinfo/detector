@@ -16,22 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBFILEEXCEPTION_H
-#define IBPERFLIB_IBFILEEXCEPTION_H
+#ifndef DETECTOR_IBPERFEXCEPTION_H
+#define DETECTOR_IBPERFEXCEPTION_H
 
 #include <exception>
 #include <string>
-#include "IbPerfException.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
- * An exception, which signalises an error during a file-operation.
+ * An exception, which signalises an error in IbPerfLib.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
  * @date July 2018
  */
-class IbFileException : public IbPerfException {
+class IbPerfException : public std::exception {
 
 public:
 
@@ -40,15 +39,31 @@ public:
      *
      * @param message Error message
      */
-    explicit IbFileException(const std::string &message) noexcept :
-            IbPerfException("Error while performing a File operation: " + message) {
+    explicit IbPerfException(std::string message) noexcept :
+            message(std::move(message)) {
 
+    }
+
+    IbPerfException(const IbPerfException &copy) noexcept {
+        this->message = copy.message;
     }
 
     /**
      * Destructor.
      */
-    ~IbFileException() override = default;
+    ~IbPerfException() override = default;
+
+    /**
+     * Overriding function from std::exception.
+     */
+    const char *what() const noexcept override {
+        return message.c_str();
+    }
+
+
+private:
+
+    std::string message;
 
 };
 

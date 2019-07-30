@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBDIAGPERFCOUNTER_H
-#define IBPERFLIB_IBDIAGPERFCOUNTER_H
+#ifndef DETECTOR_IBDIAGPERFCOUNTER_H
+#define DETECTOR_IBDIAGPERFCOUNTER_H
 
 #include <cstdint>
 #include <fstream>
 
-namespace IbPerfLib {
+namespace Detector {
 
 /*
  * Reads the diagnostic counters of a local device from
@@ -298,10 +298,10 @@ private:
     std::string m_deviceName;
     uint8_t m_portNumber;
 
-    char buffer[128];
+    char m_buffer[128];
 
-    std::ifstream files[22];
-    uint64_t baseValues[22];
+    std::ifstream m_files[22];
+    uint64_t m_baseValues[22];
 };
 
 }

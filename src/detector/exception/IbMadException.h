@@ -16,22 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBVERBSEXCEPTION_H
-#define IBPERFLIB_IBVERBSEXCEPTION_H
+#ifndef DETECTOR_IBMADEXCEPTION_H
+#define DETECTOR_IBMADEXCEPTION_H
 
 #include <exception>
 #include <string>
 #include "IbPerfException.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
- * An exception, which signalises an error during an ibverbs-operation.
+ * An exception, which signalises an error during an ibmad-operation.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
- * @date August 2018
+ * @date July 2018
  */
-class IbVerbsException : public IbPerfException {
+class IbMadException : public IbPerfException {
 
 public:
 
@@ -40,15 +40,15 @@ public:
      *
      * @param message Error message
      */
-    explicit IbVerbsException(const std::string &message) noexcept :
-            IbPerfException("Error while performing a Verbs operation: " + message) {
+    explicit IbMadException(const std::string &message) noexcept :
+            IbPerfException("Error while performing a MAD operation: " + message) {
 
     }
 
     /**
      * Destructor.
      */
-    ~IbVerbsException() override = default;
+    ~IbMadException() override = default;
 };
 
 }

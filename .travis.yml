@@ -19,15 +19,15 @@ jobs:
     - stage: build
       script: ./build.sh
 
-before_deploy: tar -cf ibperf-lib-${TRAVIS_TAG}.tar -C build/ ar/libIbPerfLib.a bin/IbPerfTest bin/IbDiagPerfTest
+before_deploy: tar -cf detector-${TRAVIS_TAG}.tar -C build/ ar/libdetector.a bin/perftest bin/diagtest
 
 deploy:
   provider: releases
   api_key: ${ACCESS_TOKEN}
-  file: ibperf-lib-${TRAVIS_TAG}.tar
+  file: detector-${TRAVIS_TAG}.tar
   skip_cleanup: true
   overwrite: true
   on:
-    repo: hhu-bsinfo/ibperf-lib
+    repo: hhu-bsinfo/detector
     branch: master
     tags: true

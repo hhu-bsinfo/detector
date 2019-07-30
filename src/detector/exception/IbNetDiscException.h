@@ -16,21 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBPERFEXCEPTION_H
-#define IBPERFLIB_IBPERFEXCEPTION_H
+#ifndef PROJECT_IBNETDISCEXCEPTION_H
+#define PROJECT_IBNETDISCEXCEPTION_H
 
 #include <exception>
 #include <string>
+#include "IbPerfException.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
- * An exception, which signalises an error in IbPerfLib.
+ * An exception, which signalises an error during an ibnetdisc-operation.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
- * @date July 2018
+ * @date March 2019
  */
-class IbPerfException : public std::exception {
+class IbNetDiscException : public IbPerfException {
 
 public:
 
@@ -39,32 +40,15 @@ public:
      *
      * @param message Error message
      */
-    explicit IbPerfException(std::string message) noexcept :
-            message(std::move(message)) {
+    explicit IbNetDiscException(const std::string &message) noexcept :
+            IbPerfException("Error while performing a network discovery operation: " + message) {
 
-    }
-
-    IbPerfException(const IbPerfException &copy) noexcept {
-        this->message = copy.message;
     }
 
     /**
      * Destructor.
      */
-    ~IbPerfException() override = default;
-
-    /**
-     * Overriding function from std::exception.
-     */
-    const char *what() const noexcept override {
-        return message.c_str();
-    }
-
-
-private:
-
-    std::string message;
-
+    ~IbNetDiscException() override = default;
 };
 
 }

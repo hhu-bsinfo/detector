@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBPERFCOUNTER_H
-#define IBPERFLIB_IBPERFCOUNTER_H
+#ifndef DETECTOR_IBPERFCOUNTER_H
+#define DETECTOR_IBPERFCOUNTER_H
 
 #include <cstdint>
 #include <ostream>
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
  * Base class for an implementation that read MAD performance values.

@@ -18,56 +18,56 @@ cmake_minimum_required(VERSION 3.5)
 
 # Set version
 execute_process(COMMAND git describe --tags --abbrev=0 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        OUTPUT_VARIABLE IBPERFLIB_VERSION ERROR_QUIET)
-string(STRIP "${IBPERFLIB_VERSION}" IBPERFLIB_VERSION)
-if (IBPERFLIB_VERSION STREQUAL "")
-    set(IBPERFLIB_VERSION "v0.0.0")
+        OUTPUT_VARIABLE DETECTOR_VERSION ERROR_QUIET)
+string(STRIP "${DETECTOR_VERSION}" DETECTOR_VERSION)
+if (DETECTOR_VERSION STREQUAL "")
+    set(DETECTOR_VERSION "v0.0.0")
 endif ()
 
 # Set git revision
 execute_process(COMMAND git log -1 --format=%h --date=short HEAD WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        OUTPUT_VARIABLE IBPERFLIB_GIT_REV ERROR_QUIET)
-string(STRIP "${IBPERFLIB_GIT_REV}" IBPERFLIB_GIT_REV)
-if (IBPERFLIB_GIT_REV STREQUAL "")
-    set(IBPERFLIB_GIT_REV "not available")
+        OUTPUT_VARIABLE DETECTOR_GIT_REV ERROR_QUIET)
+string(STRIP "${DETECTOR_GIT_REV}" DETECTOR_GIT_REV)
+if (DETECTOR_GIT_REV STREQUAL "")
+    set(DETECTOR_GIT_REV "not available")
 endif ()
 
 # Set git branch
 execute_process(COMMAND git rev-parse --symbolic-full-name --abbrev-ref HEAD
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        OUTPUT_VARIABLE IBPERFLIB_GIT_BRANCH ERROR_QUIET)
-string(STRIP "${IBPERFLIB_GIT_BRANCH}" IBPERFLIB_GIT_BRANCH)
-if (IBPERFLIB_GIT_BRANCH STREQUAL "")
-    set(IBPERFLIB_GIT_BRANCH "master")
+        OUTPUT_VARIABLE DETECTOR_GIT_BRANCH ERROR_QUIET)
+string(STRIP "${DETECTOR_GIT_BRANCH}" DETECTOR_GIT_BRANCH)
+if (DETECTOR_GIT_BRANCH STREQUAL "")
+    set(DETECTOR_GIT_BRANCH "master")
 endif ()
 
 # Set build date
-string(TIMESTAMP IBPERFLIB_BUILD_DATE "%Y-%m-%d %H:%M:%S")
+string(TIMESTAMP DETECTOR_BUILD_DATE "%Y-%m-%d %H:%M:%S")
 
 # Check if the installed version of the ibmad-library supports all 64-bit error counters
 execute_process(COMMAND bash -c "./check_addl_ext_counters_support.sh"
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        OUTPUT_VARIABLE IBPERFLIB_USE_ADDITIONAL_EXTENDED_COUNTERS)
+        OUTPUT_VARIABLE DETECTOR_USE_ADDITIONAL_EXTENDED_COUNTERS)
 
 # Print build information
-message("IbPerfLib ${IBPERFLIB_VERSION} - git ${IBPERFLIB_GIT_REV}(${IBPERFLIB_GIT_BRANCH}), \
-build date: ${IBPERFLIB_BUILD_DATE}")
+message("Detector ${DETECTOR_VERSION} - git ${DETECTOR_GIT_REV}(${DETECTOR_GIT_BRANCH}), \
+build date: ${DETECTOR_BUILD_DATE}")
 
-if (IBPERFLIB_USE_ADDITIONAL_EXTENDED_COUNTERS STREQUAL "1")
+if (DETECTOR_USE_ADDITIONAL_EXTENDED_COUNTERS STREQUAL "1")
     message(STATUS "Additional extended counters are supported!")
 else ()
     message(STATUS "Additional extended counters are not supported!")
 endif ()
 
 # Set preprocessor defines
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DIBPERFLIB_VERSION='${IBPERFLIB_VERSION}'\
-    -DIBPERFLIB_GIT_REV='${IBPERFLIB_GIT_REV}' -DIBPERFLIB_GIT_BRANCH='${IBPERFLIB_GIT_BRANCH}' \
-    -DIBPERFLIB_BUILD_DATE='${IBPERFLIB_BUILD_DATE}' \
-    -DUSE_ADDITIONAL_EXTENDED_COUNTERS='${IBPERFLIB_USE_ADDITIONAL_EXTENDED_COUNTERS}'")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDETECTOR_VERSION='${DETECTOR_VERSION}'\
+    -DDETECTOR_GIT_REV='${DETECTOR_GIT_REV}' -DDETECTOR_GIT_BRANCH='${DETECTOR_GIT_BRANCH}' \
+    -DDETECTOR_BUILD_DATE='${DETECTOR_BUILD_DATE}' \
+    -DUSE_ADDITIONAL_EXTENDED_COUNTERS='${DETECTOR_USE_ADDITIONAL_EXTENDED_COUNTERS}'")
 
 # Set source directory variables
-set(IBPERFLIB_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
-set(IBPERFLIB_SRC_DIR "${IBPERFLIB_ROOT_DIR}/src")
+set(DETECTOR_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
+set(DETECTOR_SRC_DIR "${DETECTOR_ROOT_DIR}/src")
 
 # Set output directory variables
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/ar)
@@ -85,6 +85,6 @@ endif ()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -fPIC")
 
 # Add subdirectories
-add_subdirectory(IbPerfLib)
-add_subdirectory(IbPerfTest)
-add_subdirectory(IbDiagPerfTest)
+add_subdirectory(detector)
+add_subdirectory(perftest)
+add_subdirectory(diagtest)

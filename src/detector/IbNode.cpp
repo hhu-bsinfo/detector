@@ -1,4 +1,4 @@
-#include <IbPerfLib/Exception/IbVerbsException.h>
+#include <detector/exception/IbVerbsException.h>
 
 /*
  * Copyright (C) 2018 Heinrich-Heine-Universitaet Duesseldorf,
@@ -21,7 +21,7 @@
 #include "IbNode.h"
 #include "IbPortCompat.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 IbNode::IbNode(ibv_device *device, bool compat) : IbPerfCounter(),
                                                    m_guid(0),

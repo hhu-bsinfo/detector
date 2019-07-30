@@ -16,22 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef PROJECT_IBNETDISCEXCEPTION_H
-#define PROJECT_IBNETDISCEXCEPTION_H
+#ifndef DETECTOR_IBVERBSEXCEPTION_H
+#define DETECTOR_IBVERBSEXCEPTION_H
 
 #include <exception>
 #include <string>
 #include "IbPerfException.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
- * An exception, which signalises an error during an ibnetdisc-operation.
+ * An exception, which signalises an error during an ibverbs-operation.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
- * @date March 2019
+ * @date August 2018
  */
-class IbNetDiscException : public IbPerfException {
+class IbVerbsException : public IbPerfException {
 
 public:
 
@@ -40,15 +40,15 @@ public:
      *
      * @param message Error message
      */
-    explicit IbNetDiscException(const std::string &message) noexcept :
-            IbPerfException("Error while performing a network discovery operation: " + message) {
+    explicit IbVerbsException(const std::string &message) noexcept :
+            IbPerfException("Error while performing a Verbs operation: " + message) {
 
     }
 
     /**
      * Destructor.
      */
-    ~IbNetDiscException() override = default;
+    ~IbVerbsException() override = default;
 };
 
 }

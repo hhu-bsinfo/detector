@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBFABRIC_H
-#define IBPERFLIB_IBFABRIC_H
+#ifndef DETECTOR_IBFABRIC_H
+#define DETECTOR_IBFABRIC_H
 
 #include "IbNode.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
  * Represents an entire InfiniBand-fabric.

@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBNODE_H
-#define IBPERFLIB_IBNODE_H
+#ifndef DETECTOR_IBNODE_H
+#define DETECTOR_IBNODE_H
 
 #include <cstdint>
 #include <ibnetdisc.h>
@@ -25,7 +25,7 @@
 #include <vector>
 #include "IbPort.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
  * Represents a node in an InfiniBand-fabric (e.g. a Switch or an HCA).

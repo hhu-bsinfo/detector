@@ -17,9 +17,9 @@
  */
 
 #include "IbPort.h"
-#include "IbPerfLib/Exception/IbMadException.h"
+#include "detector/exception/IbMadException.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 IbPort::IbPort(ibv_port_attr attributes, uint8_t portNum) : IbPerfCounter(),
                                                             m_lid(attributes.lid),

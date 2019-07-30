@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBPORTCOUNTER_H
-#define IBPERFLIB_IBPORTCOUNTER_H
+#ifndef DETECTOR_IBPORTCOUNTER_H
+#define DETECTOR_IBPORTCOUNTER_H
 
 // The extended 64-bit versions of rcvErrors, rcvRemotePhysicalErrors, rcvSwitchRelayErrors, xmitDiscards,
 // xmitConstraintErrors, rcvConstraintErrors, localLinkIntegrityErrors, excessiveBufferOverrunErrors, xmitWait
@@ -41,7 +41,7 @@
 #include <infiniband/verbs.h>
 #include "IbPerfCounter.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
  * Uses the MAD-library to read performance counters from an InfiniBand-port.

@@ -14,22 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-project(IbPerfLib)
+project(diagtest)
 message(STATUS "Project " ${PROJECT_NAME})
 
-include_directories(${IBPERFLIB_SRC_DIR})
+include_directories(${DETECTOR_SRC_DIR})
  
 set(SOURCE_FILES
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/BuildConfig.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPerfCounter.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPort.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbNode.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbFabric.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbDiagPerfCounter.cpp
-        ${IBPERFLIB_SRC_DIR}/IbPerfLib/IbPortCompat.cpp)
+        ${DETECTOR_SRC_DIR}/detector/test/DiagTest.cpp)
  
-add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/include/infiniband")
 
-target_link_libraries(${PROJECT_NAME} -libverbs -libmad -libnetdisc)
+target_link_libraries(${PROJECT_NAME} detector)

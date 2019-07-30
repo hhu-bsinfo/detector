@@ -18,7 +18,7 @@
 
 #include "IbPerfCounter.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 IbPerfCounter::IbPerfCounter() :
         m_xmitDataBytes(0),

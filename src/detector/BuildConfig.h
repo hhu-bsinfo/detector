@@ -16,18 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_VERSION_H
-#define IBPERFLIB_VERSION_H
+#ifndef DETECTOR_VERSION_H
+#define DETECTOR_VERSION_H
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
- * Holds information about the build cofiguration and program version.
+ * Holds information about the build configuration and program version.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
  * @date October 2018
  */
 class BuildConfig {
+
+private:
+
+    static const constexpr char banner[] =
+            "    ____       __            __             # Version             : %s\n"
+            "   / __ \\___  / /____  _____/ /_____  _____ # Build Date          : %s\n"
+            "  / / / / _ \\/ __/ _ \\/ ___/ __/ __ \\/ ___/ # Git Branch          : %s\n"
+            " / /_/ /  __/ /_/  __/ /__/ /_/ /_/ / /     # Git Commit          : %s\n"
+            "/_____/\\___/\\__/\\___/\\___/\\__/\\____/_/      # Additional counters : %s\n";
 
 public:
 
@@ -36,6 +45,10 @@ public:
     static const char *GIT_BRANCH;
     static const char *BUILD_DATE;
     static const bool ADDITIONAL_EXTENDED_COUNTERS_ENABLED;
+
+public:
+
+    static void printBanner();
 
 };
 

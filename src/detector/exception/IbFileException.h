@@ -16,22 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBMADEXCEPTION_H
-#define IBPERFLIB_IBMADEXCEPTION_H
+#ifndef DETECTOR_IBFILEEXCEPTION_H
+#define DETECTOR_IBFILEEXCEPTION_H
 
 #include <exception>
 #include <string>
 #include "IbPerfException.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
- * An exception, which signalises an error during an ibmad-operation.
+ * An exception, which signalises an error during a file-operation.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
  * @date July 2018
  */
-class IbMadException : public IbPerfException {
+class IbFileException : public IbPerfException {
 
 public:
 
@@ -40,15 +40,16 @@ public:
      *
      * @param message Error message
      */
-    explicit IbMadException(const std::string &message) noexcept :
-            IbPerfException("Error while performing a MAD operation: " + message) {
+    explicit IbFileException(const std::string &message) noexcept :
+            IbPerfException("Error while performing a File operation: " + message) {
 
     }
 
     /**
      * Destructor.
      */
-    ~IbMadException() override = default;
+    ~IbFileException() override = default;
+
 };
 
 }

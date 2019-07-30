@@ -19,9 +19,9 @@
 #include <csignal>
 #include <chrono>
 #include <thread>
-#include <IbPerfLib/BuildConfig.h>
-#include <IbPerfLib/Exception/IbMadException.h>
-#include <IbPerfLib/IbFabric.h>
+#include <detector/BuildConfig.h>
+#include <detector/exception/IbMadException.h>
+#include <detector/IbFabric.h>
 
 bool isRunning = true;
 
@@ -32,13 +32,10 @@ static void SignalHandler(int signal) {
 }
 
 int main(int argc, char *argv[]) {
-    printf("IbPerfLib %s - git %s(%s)\nBuild date: %s\nAdditional extended counters: %s\n\n",
-            IbPerfLib::BuildConfig::VERSION, IbPerfLib::BuildConfig::GIT_REV, IbPerfLib::BuildConfig::GIT_BRANCH,
-            IbPerfLib::BuildConfig::BUILD_DATE, IbPerfLib::BuildConfig::ADDITIONAL_EXTENDED_COUNTERS_ENABLED ?
-            "Enabled" : "Disabled");
+    Detector::BuildConfig::printBanner();
 
     if(argc < 3) {
-        printf("Usage: ./IbPerfTest <network/local> <mad/compat>\n");
+        printf("Usage: ./perftest <network/local> <mad/compat>\n");
         exit(EXIT_FAILURE);
     }
 
@@ -50,7 +47,7 @@ int main(int argc, char *argv[]) {
     } else if(!strcmp(argv[1], "local")) {
         network = false;
     } else {
-        printf("Usage: ./IbPerfTest <network/local> <mad/compat>\n");
+        printf("Usage: ./perftest <network/local> <mad/compat>\n");
         exit(EXIT_FAILURE);
     }
 
@@ -59,11 +56,11 @@ int main(int argc, char *argv[]) {
     } else if(!strcmp(argv[2], "compat")) {
         compat = true;
     } else {
-        printf("Usage: ./IbPerfTest <network/local> <mad/compat>\n");
+        printf("Usage: ./perftest <network/local> <mad/compat>\n");
         exit(EXIT_FAILURE);
     }
 
-    IbPerfLib::IbFabric fabric(network, compat);
+    Detector::IbFabric fabric(network, compat);
 
     signal(SIGINT, SignalHandler);
 
@@ -71,7 +68,7 @@ int main(int argc, char *argv[]) {
         try {
             fabric.RefreshCounters();
             std::cout << fabric << std::endl << std::endl;
-        } catch(const IbPerfLib::IbPerfException &exception) {
+        } catch(const Detector::IbPerfException &exception) {
             printf("An exception occurred: %s", exception.what());
         }
 

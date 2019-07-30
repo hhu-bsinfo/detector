@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef IBPERFLIB_IBPORTCOMPAT_H
-#define IBPERFLIB_IBPORTCOMPAT_H
+#ifndef DETECTOR_IBPORTCOMPAT_H
+#define DETECTOR_IBPORTCOMPAT_H
 
 #include <cstdint>
 #include <fstream>
 #include "IbPort.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 /**
  * Implementation of IbPort, which does not use the ibmad-library to read the performance counters,

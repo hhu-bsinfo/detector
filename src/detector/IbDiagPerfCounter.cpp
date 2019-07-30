@@ -18,10 +18,10 @@
 
 #include <cstring>
 #include <iostream>
-#include "IbPerfLib/Exception/IbFileException.h"
+#include "detector/exception/IbFileException.h"
 #include "IbDiagPerfCounter.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 IbDiagPerfCounter::IbDiagPerfCounter(std::string deviceName, uint8_t portNumber) :
         m_lifespan(0),
@@ -47,54 +47,57 @@ IbDiagPerfCounter::IbDiagPerfCounter(std::string deviceName, uint8_t portNumber)
         m_sqTransportRetriesExceededErrors(0),
         m_sqCompletionQueueEntryErrors(0),
         m_deviceName(std::move(deviceName)),
-        m_portNumber(portNumber) {
+        m_portNumber(portNumber),
+        m_buffer(),
+        m_files(),
+        m_baseValues() {
     std::string path = "/sys/class/infiniband/" + m_deviceName + (m_portNumber > 0 ?
                        "/ports/" + std::to_string(m_portNumber) + "/hw_counters/" : "/hw_counters/");
 
-    files[0] = std::ifstream(path + "lifespan", std::ios::in);
-    files[1] = std::ifstream(path + "rq_num_lle", std::ios::in);
-    files[2] = std::ifstream(path + "rq_num_lpe", std::ios::in);
-    files[3] = std::ifstream(path + "rq_num_lqpoe", std::ios::in);
-    files[4] = std::ifstream(path + "rq_num_oos", std::ios::in);
-    files[5] = std::ifstream(path + "rq_num_rae", std::ios::in);
-    files[6] = std::ifstream(path + "rq_num_rire", std::ios::in);
-    files[7] = std::ifstream(path + "rq_num_rnr", std::ios::in);
-    files[8] = std::ifstream(path + "rq_num_wrfe", std::ios::in);
-    files[9] = std::ifstream(path + "sq_num_bre", std::ios::in);
-    files[10] = std::ifstream(path + "sq_num_lle", std::ios::in);
-    files[11] = std::ifstream(path + "sq_num_lpe", std::ios::in);
-    files[12] = std::ifstream(path + "sq_num_lqpoe", std::ios::in);
-    files[13] = std::ifstream(path + "sq_num_mwbe", std::ios::in);
-    files[14] = std::ifstream(path + "sq_num_oos", std::ios::in);
-    files[15] = std::ifstream(path + "sq_num_rae", std::ios::in);
-    files[16] = std::ifstream(path + "sq_num_rire", std::ios::in);
-    files[17] = std::ifstream(path + "sq_num_rnr", std::ios::in);
-    files[18] = std::ifstream(path + "sq_num_roe", std::ios::in);
-    files[19] = std::ifstream(path + "sq_num_rree", std::ios::in);
-    files[20] = std::ifstream(path + "sq_num_tree", std::ios::in);
-    files[21] = std::ifstream(path + "sq_num_wrfe", std::ios::in);
+    m_files[0] = std::ifstream(path + "lifespan", std::ios::in);
+    m_files[1] = std::ifstream(path + "rq_num_lle", std::ios::in);
+    m_files[2] = std::ifstream(path + "rq_num_lpe", std::ios::in);
+    m_files[3] = std::ifstream(path + "rq_num_lqpoe", std::ios::in);
+    m_files[4] = std::ifstream(path + "rq_num_oos", std::ios::in);
+    m_files[5] = std::ifstream(path + "rq_num_rae", std::ios::in);
+    m_files[6] = std::ifstream(path + "rq_num_rire", std::ios::in);
+    m_files[7] = std::ifstream(path + "rq_num_rnr", std::ios::in);
+    m_files[8] = std::ifstream(path + "rq_num_wrfe", std::ios::in);
+    m_files[9] = std::ifstream(path + "sq_num_bre", std::ios::in);
+    m_files[10] = std::ifstream(path + "sq_num_lle", std::ios::in);
+    m_files[11] = std::ifstream(path + "sq_num_lpe", std::ios::in);
+    m_files[12] = std::ifstream(path + "sq_num_lqpoe", std::ios::in);
+    m_files[13] = std::ifstream(path + "sq_num_mwbe", std::ios::in);
+    m_files[14] = std::ifstream(path + "sq_num_oos", std::ios::in);
+    m_files[15] = std::ifstream(path + "sq_num_rae", std::ios::in);
+    m_files[16] = std::ifstream(path + "sq_num_rire", std::ios::in);
+    m_files[17] = std::ifstream(path + "sq_num_rnr", std::ios::in);
+    m_files[18] = std::ifstream(path + "sq_num_roe", std::ios::in);
+    m_files[19] = std::ifstream(path + "sq_num_rree", std::ios::in);
+    m_files[20] = std::ifstream(path + "sq_num_tree", std::ios::in);
+    m_files[21] = std::ifstream(path + "sq_num_wrfe", std::ios::in);
 
-    for (const std::ifstream &file : files) {
+    for (const std::ifstream &file : m_files) {
         if (!file.is_open()) {
             throw IbFileException("Unable to open file!");
         }
     }
 
-    std::memset(baseValues, 0, sizeof(baseValues));
+    std::memset(m_baseValues, 0, sizeof(m_baseValues));
 }
 
 IbDiagPerfCounter::~IbDiagPerfCounter() {
-    for (std::ifstream &file : files) {
+    for (std::ifstream &file : m_files) {
         file.close();
     }
 }
 
 void IbDiagPerfCounter::ResetCounters() {
-    for(uint32_t i = 0; i < sizeof(files) / sizeof(std::ifstream); i++) {
-        files[i].seekg(0, std::ios::beg);
-        files[i].getline(buffer, sizeof(buffer));
+    for(uint32_t i = 0; i < sizeof(m_files) / sizeof(std::ifstream); i++) {
+        m_files[i].seekg(0, std::ios::beg);
+        m_files[i].getline(m_buffer, sizeof(m_buffer));
 
-        baseValues[i] = strtoull(buffer, nullptr, 10);
+        m_baseValues[i] = strtoull(m_buffer, nullptr, 10);
     }
 }
 
@@ -124,16 +127,16 @@ void IbDiagPerfCounter::RefreshCounters() {
 }
 
 uint64_t IbDiagPerfCounter::ReadCounter(uint8_t index) {
-    std::memset(buffer, 0, sizeof(buffer));
+    std::memset(m_buffer, 0, sizeof(m_buffer));
 
-    if(!files[index].good()) {
+    if(!m_files[index].good()) {
         throw IbFileException("Unable to read file!");
     }
 
-    files[index].seekg(0, std::ios::beg);
-    files[index].getline(buffer, sizeof(buffer));
+    m_files[index].seekg(0, std::ios::beg);
+    m_files[index].getline(m_buffer, sizeof(m_buffer));
 
-    return strtoull(buffer, nullptr, 10) - baseValues[index];
+    return strtoull(m_buffer, nullptr, 10) - m_baseValues[index];
 }
 
 }

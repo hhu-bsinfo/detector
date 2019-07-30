@@ -19,9 +19,9 @@
 #include <cstring>
 #include <iostream>
 #include "IbPortCompat.h"
-#include "IbPerfLib/Exception/IbFileException.h"
+#include "detector/exception/IbFileException.h"
 
-namespace IbPerfLib {
+namespace Detector {
 
 IbPortCompat::IbPortCompat(std::string deviceName, ibv_port_attr attributes, uint8_t portNum) :
         IbPort(attributes, portNum),
