@@ -1,7 +1,7 @@
 # Detector: A small library for reading the performance counters of all InfiniBand devices in a network
 
 <p align="center">
-<img src="logo.png" height=250>
+<img src="logo.svg" height=175>
 </p>
 
 <p align="center">
