@@ -25,7 +25,7 @@
 namespace Detector {
 
 /**
- * An exception, which signalises an error in IbPerfLib.
+ * Super-class for all InfiniBand related exceptions.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
  * @date July 2018
@@ -35,7 +35,7 @@ class IbPerfException : public std::exception {
 public:
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param message Error message
      */
@@ -44,6 +44,9 @@ public:
 
     }
 
+    /**
+     * Copy-Constructor.
+     */
     IbPerfException(const IbPerfException &copy) noexcept {
         this->message = copy.message;
     }
@@ -59,7 +62,6 @@ public:
     const char *what() const noexcept override {
         return message.c_str();
     }
-
 
 private:
 

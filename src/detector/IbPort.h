@@ -44,7 +44,7 @@
 namespace Detector {
 
 /**
- * Uses the MAD-library to read performance counters from an InfiniBand-port.
+ * Reads performance counters from a single port of an InfiniBand device.
  *
  * @author Fabian Ruhland, Fabian.Ruhland@hhu.de
  * @date May 2018
@@ -79,21 +79,21 @@ public:
     /**
      * Get the port's local id.
      */
-    uint16_t GetLid() {
+    uint16_t GetLid() const {
         return m_lid;
     }
 
     /**
      * Get the number, that the port has on its device.
      */
-    uint8_t GetNum() {
+    uint8_t GetNum() const {
         return m_portNum;
     }
 
     /**
      * Get the port's link width.
      */
-    uint8_t GetLinkWidth() {
+    uint8_t GetLinkWidth() const {
         return m_linkWidth;
     }
 

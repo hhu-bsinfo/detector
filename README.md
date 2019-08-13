@@ -18,9 +18,12 @@ It is also possible, to read the diagnostic performance counters of local infini
 
 # Build instructions
 
-This project supports Linux only. It uses the libibmad- and libibnetdisc-libraries. CMake is used to generate build
+This project supports Linux only. It uses the ibmad- and ibnetdisc-libraries. CMake is used to generate build
 scripts. To compile everything, just run *build.sh*.  
-The output will be a static  library, that can be linked against other projects.  
+The output will be a static  library, that can be linked against other projects.
+
+# Include in other projects
+
 To let cmake automatically download and build Detector for your project, you may insert the following code into your CMakeLists.txt:
 
 ```
@@ -49,28 +52,77 @@ target_link_libraries(Detector ibverbs ibmad ibnetdisc)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -I/usr/include/infiniband)
 ```
 
+# Usage
+
+Using Detector is very simple and does not require a lot of code. To scan for InfiniBand devices, you just need to create an instance of `IbFabric`:
+
+```
+bool network = true;
+bool compatibility = true;
+Detector::IbFabric *fabric = nullptr;
+
+try {
+    fabric = new Detector::IbFabric(network, compat);
+} catch(const Detector::IbPerfException &exception) {
+    printf("An exception occurred: %s", exception.what());
+}
+```
+
+The parameters `network` and `compatibility` determine how your network will be scanned. See [Run instructions](#run-instructions
+) for more detail on these parameters.
+
+`IbFabric` provides an array of nodes, that have been found in your network, while each node has an array of ports. To print out the amount of transmitted bytes of each port, you can use the following code:
+
+```
+for(Detector::IbNode *node : fabric.GetNodes()) {
+    for(Detector::IbPort *port : node->GetPorts()) {
+        printf("%s (port %u): %lu", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes());
+    }
+}
+```
+
+This will output a string like that for every device:
+
+```
+mlx4_0 (port 1): 25672032 Bytes
+```
+
+It is also possible to get aggregated counters for a whole node, by calling the getter-methods on an `IbNode` object.
+
+To refresh or reset the counters of a node or port, you can call `RefreshCounters()` or `ResetCounters()` respectively.  
+It is also possible to refresh/reset the counters of the whole fabric at once.
 
 # Run instructions
 
-Detector comes with two small test programs called *perftest* and *diagperftest*.  
-*perftest* scans your InfiniBand network for devices and prints their counters to `stdout`.  
-*diagperftest* prints the diagnostic counters of your local infiniBand devices.
+Detector comes with two small test programs called *perftest* and *diagtest*.  
 
-On a Debian-based system, you can run theses commands to build and run *perftest*:
+*perftest* scans your InfiniBand network for devices and prints their counters to `stdout`, while *diagtest* prints the diagnostic counters of your local infiniBand devices.
+
+On a Debian-based system, you can use theses commands to build and run *perftest*:
 
 ```
-sudo apt install cmake libibmad-dev libibumad-dev libibnetdisc-dev libopensm-dev
+sudo apt install cmake libibverbs-dev libibmad-dev libibumad-dev libibnetdisc-dev libopensm-dev
 ./build.sh
 sudo ./build/bin/perftest network mad
 ```
 
-If you don't have root privileges, you can run perftest in compatability mode:
+Since Ubuntu 18.04 (or Debian 10) you do not need to install the InfiniBand libraries separately, as they are provided by the package *rdma-core*.
+If you are using such an operating system, you should replace the first line by the following:
+
+```
+sudo apt install cmake rdma-core
+```
+
+*perftest* can either scan your entire network or only your local machine. This is determined by the first parameter (`network`/`local`).  
+The second parameter determines, whether to use the ibmad-library or run in compatibility mode (`mad`/`compat`).
+
+In compatibility mode, the performance counters are read using the filesystem. In contrary to `mad`, this mode does not require root privileges, however it will only work for local InfiniBand devices.
 
 ```
 ./build/bin/perftest local compat
 ```
 
-To run diagtest, run the following command:
+To run *diagtest*, use the following command:
 
 ```
 ./build/bin/diagtest

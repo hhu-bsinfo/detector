@@ -34,7 +34,7 @@ public:
     /**
      * Constructor.
      *
-     * @param deviceName Name of the device, whose diagnostic counters shall be monitored
+     * @param deviceName The name of the device, whose diagnostic counters shall be monitored
      * @param portNumber The port, whose diagnostic counters shall be monitored (Set to 0 to monitor the whole device)
      */
     explicit IbDiagPerfCounter(std::string deviceName, uint8_t portNumber);
@@ -56,7 +56,7 @@ public:
     void RefreshCounters();
 
     /**
-     * Get the name of the device, that this counter belongs to.
+     * Get the name of the device, that this counter is monitoring.
      */
     std::string GetDeviceName() {
         return m_deviceName;
@@ -64,7 +64,7 @@ public:
 
     /**
      * Get the number of the port, that this counter is monitoring.
-     * A port number of 0 means, that the whole device is being monitored.
+     * A value of 0 means, that the whole device is being monitored.
      */
     uint8_t GetPortNumber() {
         return m_portNumber;
@@ -295,12 +295,31 @@ private:
 
 private:
 
+    /**
+     * The device's name.
+     */
     std::string m_deviceName;
+
+    /**
+     * The number of the port, of which the counters will be read.
+     */
     uint8_t m_portNumber;
 
+    /**
+     * A buffer used for reading the counters.
+     */
     char m_buffer[128];
 
+    /**
+     * An array of streams which contains one stream for each counter file
+     */
     std::ifstream m_files[22];
+
+    /**
+     * An array containing all counters from the last time that ResetCounters() has been called.
+     * This is needed, because the hardware counter cannot be reset. By subtracting these base values
+     * from the real values, we can simulate a reset.
+     */
     uint64_t m_baseValues[22];
 };
 

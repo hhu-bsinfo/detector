@@ -36,7 +36,7 @@ class IbFileException : public IbPerfException {
 public:
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param message Error message
      */

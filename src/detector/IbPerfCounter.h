@@ -25,7 +25,7 @@
 namespace Detector {
 
 /**
- * Base class for an implementation that read MAD performance values.
+ * Base class for an implementation that reads InfiniBand performance values.
  *
  * DEVELOPER NOTE: The values for XmitData and RcvData are returned per link by the MAD-library.
  *                 An implementation of IbPerfCounter should be aware of this and multiply the
@@ -48,13 +48,13 @@ public:
     virtual ~IbPerfCounter() = default;
 
     /**
-     * Reset all MAD-counters.
+     * Reset all counters.
      */
     virtual void ResetCounters() = 0;
 
     /**
-     * Query all MAD-counters from all ports and aggregate the results.
-     * The resulting values will be saved in the counter variables.
+     * Update all counters. The resulting values will be saved in the counter variables and can be retrieved
+     * via the getter-methods.
      */
     virtual void RefreshCounters() = 0;
 

@@ -36,7 +36,7 @@ class IbNetDiscException : public IbPerfException {
 public:
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param message Error message
      */

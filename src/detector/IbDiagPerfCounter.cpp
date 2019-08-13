@@ -93,7 +93,11 @@ IbDiagPerfCounter::~IbDiagPerfCounter() {
 }
 
 void IbDiagPerfCounter::ResetCounters() {
-    for(uint32_t i = 0; i < sizeof(m_files) / sizeof(std::ifstream); i++) {
+    for(uint64_t i = 0; i < sizeof(m_files) / sizeof(std::ifstream); i++) {
+        if(!m_files[i].good()) {
+            throw IbFileException("Unable to read file!");
+        }
+
         m_files[i].seekg(0, std::ios::beg);
         m_files[i].getline(m_buffer, sizeof(m_buffer));
 

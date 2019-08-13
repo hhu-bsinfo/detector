@@ -48,7 +48,7 @@ public:
      * Compatibility constructor.
      *
      * Initializes an instance of IbNode with information from an ibverbs-context instead of an ibnd_node-struct.
-     * Uses IbPortCompat instead of IbPort, when compat is set to true.
+     * Uses IbPortCompat instead of IbPort, when compatibility is set to true.
      *
      * @param device The device context to use for this node.
      * @param compatibility Whether to use IbPortCompat or IbPort
@@ -79,7 +79,7 @@ public:
     /**
      * Get the node's description;
      */
-    std::string GetDescription() {
+    std::string GetDescription() const {
         return m_desc;
     }
 
